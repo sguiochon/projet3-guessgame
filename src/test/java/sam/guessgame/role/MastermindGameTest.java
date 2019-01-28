@@ -19,22 +19,22 @@ public class MastermindGameTest {
 
     @Test
     public void given_When_Then() throws Exception {
-        mastermindGame.setCoder(new ComputerCoder(new Candidat(sequenceSize, possibilities)));
-        mastermindGame.setDecoder(new ComputerDecoder(new Candidat(sequenceSize, possibilities)));
+        mastermindGame.setCoder(new MastermindComputerCoder(new Candidat(sequenceSize, possibilities)));
+        mastermindGame.setDecoder(new MastermindComputerDecoder(new Candidat(sequenceSize, possibilities)));
         Assert.assertTrue("Solution trouvée en moins de " + maxNbAttempts + " tentatives", mastermindGame.runGameplay());
     }
 
     @Test
     public void given_When_Then2() throws Exception {
-        mastermindGame.setCoder(new ComputerCoder(new Sequence(new String[]{"D","F","E","C"})));
-        mastermindGame.setDecoder(new ComputerDecoder(new Candidat(sequenceSize, possibilities), new Sequence(new String[]{"D","F","G","H"})));
+        mastermindGame.setCoder(new MastermindComputerCoder(new Sequence(new String[]{"D","F","E","C"})));
+        mastermindGame.setDecoder(new MastermindComputerDecoder(new Candidat(sequenceSize, possibilities), new Sequence(new String[]{"D","F","G","H"})));
         Assert.assertTrue("Solution trouvée en moins de " + maxNbAttempts + " tentatives", mastermindGame.runGameplay());
     }
 
     @Test
     public void given_When_Then3() throws Exception {
-        mastermindGame.setCoder(new ComputerCoder(new Sequence(new String[]{"G","C","F","D"})));
-        mastermindGame.setDecoder(new ComputerDecoder(new Candidat(sequenceSize, possibilities), new Sequence(new String[]{"E","F","A","G"})));
+        mastermindGame.setCoder(new MastermindComputerCoder(new Sequence(new String[]{"G","C","F","D"})));
+        mastermindGame.setDecoder(new MastermindComputerDecoder(new Candidat(sequenceSize, possibilities), new Sequence(new String[]{"E","F","A","G"})));
         Assert.assertTrue("Solution trouvée en moins de " + maxNbAttempts + " tentatives", mastermindGame.runGameplay());
     }
 

@@ -1,7 +1,8 @@
 package sam.guessgame.role;
 
-public interface IInitializer {
+public interface ISequenceInitializer {
 
-    public void init();
+    public void initSequence();
 
 }
+

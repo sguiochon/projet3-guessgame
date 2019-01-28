@@ -1,30 +1,30 @@
 package sam.guessgame.role;
 
 import sam.guessgame.algorithm.FindSymbolsAlgorithm;
-import sam.guessgame.role.IDecoder;
-import sam.guessgame.role.Initializer;
 import sam.guessgame.model.*;
 
-public class ComputerDecoder extends Initializer implements IDecoder {
+public class MastermindComputerDecoder extends Initializer implements IMastermindDecoder {
 
 
     private FindSymbolsAlgorithm algo1;
 
 
-    public ComputerDecoder(Candidat candidat){
+    public MastermindComputerDecoder(Candidat candidat){
         super(candidat);
     }
 
-    public ComputerDecoder(Candidat candidat, Sequence startingSequence){
+    public MastermindComputerDecoder(Candidat candidat, Sequence startingSequence){
         super(candidat);
         this.startingSequence = startingSequence;
     }
 
     @Override
-    public void init(){
+    public void initSequence(){
         // Create a candidate: lists all possible symbols of each position
         //candidat = new Candidat(sequenceSize, possibleValues);
         //session = new Session();
+        if (startingSequence==null)
+            startingSequence = candidat.generateRandomSequence();
         algo1 = new FindSymbolsAlgorithm(candidat);
     }
 
@@ -33,7 +33,7 @@ public class ComputerDecoder extends Initializer implements IDecoder {
         Sequence attempt = null;
         if (session.rounds.isEmpty()) {
             // first attempt is random
-            attempt = startingSequence==null?candidat.generateRandomSequence():startingSequence;
+            attempt = startingSequence;
         }
         else {
             Round lastRound = session.rounds.get(session.rounds.size()-1);

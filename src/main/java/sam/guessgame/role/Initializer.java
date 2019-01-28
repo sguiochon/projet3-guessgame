@@ -5,7 +5,7 @@ import sam.guessgame.model.Sequence;
 
 import java.util.Random;
 
-public abstract class Initializer implements IInitializer{
+public abstract class Initializer implements ISequenceInitializer {
 
     //protected int sequenceSize;
     //protected String[] possibleValues;
@@ -15,12 +15,12 @@ public abstract class Initializer implements IInitializer{
 
     public Initializer(Sequence sequence){
         this.startingSequence = sequence;
-        init();
+        initSequence();
     }
 
     public Initializer(Candidat candidat){
         this.candidat = candidat;
-        init();
+        initSequence();
     }
     /*
     public SequenceGenerator(int sequenceSize, String[] possibleValues){

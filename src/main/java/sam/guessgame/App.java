@@ -13,14 +13,14 @@ import sam.guessgame.role.MastermindGame;
 import java.util.Scanner;
 
 @Configuration
-@ComponentScan(basePackages = {"sam.guessgame.role"})
+@ComponentScan(basePackages = {"sam.guessgame", "sam.guessgame.role"})
 @PropertySource("classpath:config.properties")
 public class App {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(App.class.getName());
 
     @Autowired
-    MastermindGame mastermindGame;
+    GameModeFactory factory;
 
     public static void main(String[] args) {
 
@@ -33,40 +33,45 @@ public class App {
 
     private void run(){
 
+        GameMode gameMode = null;
+        GameType gameType = null;
+
+        System.out.println("Sélectionnez le type de jeu");
+        gameType = GameType.getByInternalValue(inputFromKeyboard(GameType.getDescription(), GameType.getInternalValues()));
+
+        System.out.println("Sélectionnez le mode de jeu");
+        gameMode = GameMode.getByInternalValue(inputFromKeyboard(GameMode.getDescription(), GameMode.getInternalValues()));
+
+        LOGGER.debug("Type de jeu: " + gameType, gameType);
+        LOGGER.debug("Mode de jeu: " + gameMode, gameMode);
+        
+        IGameMode game = factory.getGameMode(gameMode);
+
+        game.init(gameType);
+        game.run(gameType);
+
+    }
+
+    private int inputFromKeyboard(String message, int... authorizedValues){
         Scanner scanner = new Scanner(System.in);
-        int gameMode = 0;
-        int gameType = 0;
         boolean isValidInput = false;
-
-        do{
-            System.out.println("Choisissez le type de jeu: 1 (MasterMind) ou 2 (Plus/Moins)");
-            String input = scanner.next();
-            scanner.nextLine();
-            try{
-                gameType = Integer.parseInt(input);
-            }
-            catch(NumberFormatException e){
-                System.out.println("Valeur saisie non valide...");
-            }
-            if (gameType==1 || gameType==2)
-                isValidInput = true;
-        }
-        while(!isValidInput);
-
+        int intInput = 0;
         do {
-            System.out.println("Choisissez le mode de jeu: 1 (Challenger) ou 2 (Défenseur) ou 3 (Duel)");
+            System.out.println(message);
             String input = scanner.next();
             scanner.nextLine();
             try{
-                gameMode = Integer.parseInt(input);
+                intInput = Integer.parseInt(input);
             }
             catch(NumberFormatException e){
                 System.out.println("Valeur saisie non valide...");
             }
-            if (gameMode>=1 && gameMode<=3)
-                isValidInput = true;
+            for (int val : authorizedValues){
+                if (val==intInput)
+                    isValidInput = true;
+            }
         }
         while(!isValidInput);
-
+        return intInput;
     }
 }

@@ -12,8 +12,8 @@ public class MastermindGame {
     public final int maxNbAttempts;
     public final String[] possibleValues;
 
-    IDecoder decoder;
-    ICoder coder;
+    IMastermindDecoder decoder;
+    IMastermindCoder coder;
 
     public Session session;
 
@@ -28,11 +28,11 @@ public class MastermindGame {
         session = new Session();
     }
 
-    public void setCoder(ICoder coder){
+    public void setCoder(IMastermindCoder coder){
         this.coder = coder;
     }
 
-    public void setDecoder(IDecoder decoder){
+    public void setDecoder(IMastermindDecoder decoder){
         this.decoder = decoder;
     }
 

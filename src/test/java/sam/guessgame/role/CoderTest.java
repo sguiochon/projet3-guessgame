@@ -14,7 +14,7 @@ public class CoderTest {
         Assert.assertTrue(hasNoDuplicatedSymbol(new Sequence(new String[]{"5", "3"})));
         Assert.assertTrue(!hasNoDuplicatedSymbol(new Sequence(new String[]{"6", "3", "A", "6"})));
 
-        ComputerCoder coder = new ComputerCoder(new Candidat(4, new String[] {"A", "B", "C", "D", "E", "F", "G"}));
+        MastermindComputerCoder coder = new MastermindComputerCoder(new Candidat(4, new String[] {"A", "B", "C", "D", "E", "F", "G"}));
         System.out.println("Coder.winningSequence: " + coder.getWinningSequence().toString());
         Assert.assertTrue(hasNoDuplicatedSymbol(coder.getWinningSequence()));
     }
@@ -22,7 +22,7 @@ public class CoderTest {
     @Test
     public void givenCoder_WhenSubmittingSequence_ThenCoderResultIsValid(){
         Result result;
-        ComputerCoder coder = new ComputerCoder( new Candidat(4, new String[] {"A", "B", "C", "D"}));
+        MastermindComputerCoder coder = new MastermindComputerCoder( new Candidat(4, new String[] {"A", "B", "C", "D"}));
         result = coder.evaluateAttempt(coder.getWinningSequence());
         Assert.assertTrue(result.getNbCorrectPosition()==4);
         Assert.assertTrue(result.getNbCorrectSymbol()==0);

@@ -3,7 +3,7 @@ package sam.guessgame.role;
 import sam.guessgame.model.Sequence;
 import sam.guessgame.model.Result;
 
-public interface ICoder extends IInitializer{
+public interface IMastermindCoder extends ISequenceInitializer {
 
     public Result evaluateAttempt(Sequence attempt);
 }

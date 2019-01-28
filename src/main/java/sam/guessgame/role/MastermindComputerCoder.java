@@ -1,20 +1,19 @@
 package sam.guessgame.role;
 
-import sam.guessgame.role.ICoder;
-import sam.guessgame.role.Initializer;
 import sam.guessgame.model.Candidat;
 import sam.guessgame.model.Sequence;
 import sam.guessgame.model.Result;
 
-public class ComputerCoder extends Initializer implements ICoder {
+
+public class MastermindComputerCoder extends Initializer implements IMastermindCoder {
 
     private Sequence winningSequence;
 
-    public ComputerCoder(Candidat candidat){
+    public MastermindComputerCoder(Candidat candidat){
         super(candidat);
     }
 
-    public ComputerCoder(Sequence winningSequence){
+    public MastermindComputerCoder(Sequence winningSequence){
         super(winningSequence);
     }
 
@@ -23,12 +22,12 @@ public class ComputerCoder extends Initializer implements ICoder {
     }
 
     @Override
-    public void init() {
+    public void initSequence() {
         if (candidat!=null)
             winningSequence = candidat.generateRandomSequence();
         else
             winningSequence = startingSequence;
-        System.out.println("Coder.winningSequence: " + winningSequence.toString());
+        System.out.println(">>>Coder.winningSequence: " + winningSequence.toString());
     }
 
 
