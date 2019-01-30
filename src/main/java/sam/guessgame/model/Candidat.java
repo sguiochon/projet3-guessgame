@@ -1,34 +1,50 @@
 package sam.guessgame.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+import sam.guessgame.App;
+
 import java.util.*;
 
+@Component
+@Scope("prototype")
 public class Candidat {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(Candidat.class.getName());
 
     private final static Random random = new Random(System.currentTimeMillis());;
 
     public List<List<String>> candidatSequence;
     List<String> potentialIncorrectPairs;
 
-    public Candidat(int sequenceSize, String[] possibleValues){
+    public Candidat(@Value("${sequence.size}") int sequenceSize, @Value("${list.of.symbols}")String[] possibleValues){
         candidatSequence = new ArrayList<List<String>>();
         for (int i=0; i<sequenceSize; i++){
             candidatSequence.add(new ArrayList<String>(Arrays.asList(possibleValues)));
         }
+        LOGGER.debug("Candidat instance created");
     }
 
-    public Candidat(List<String>... lists){
+    /*public Candidat(List<String>... lists){
         candidatSequence = new ArrayList<List<String>>();
         for (List<String> list : lists){
            candidatSequence.add(list);
         }
-    }
-
+    }*/
+/*
     public Candidat(String[]... arrays){
         candidatSequence = new ArrayList<List<String>>();
         for (String[] array : arrays){
             candidatSequence.add(new ArrayList(Arrays.asList(array)));
         }
-    }
+    }*/
+
+    /*public Candidat(){
+        candidatSequence = new ArrayList<List<String>>();
+    }*/
 
     public Candidat duplicate(){
         Candidat mirror = new Candidat(0, null);
@@ -132,6 +148,7 @@ public class Candidat {
     }
 
     public Sequence generateRandomSequence(){
+        LOGGER.debug("Generate random sequence..." + this.toString());
         Sequence sequence = new Sequence();
         Candidat workCandidat = this.duplicate();
         int currentColumn = 0;

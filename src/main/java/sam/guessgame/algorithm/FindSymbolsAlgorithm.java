@@ -1,5 +1,8 @@
 package sam.guessgame.algorithm;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import sam.guessgame.DefenseurMode;
 import sam.guessgame.exception.AlgorithmException;
 import sam.guessgame.model.*;
 
@@ -9,12 +12,13 @@ import java.util.Random;
 
 public class FindSymbolsAlgorithm implements VisitorAlgorithm {
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(FindSymbolsAlgorithm.class.getName());
+
     private final static Random random = new Random(System.currentTimeMillis());
     private final Candidat candidat;
 
     private Symbol oldSymbol;
     private Symbol newSymbol;
-
     private int adjustement = 0;
 
     public FindSymbolsAlgorithm(Candidat candidat){
@@ -135,6 +139,7 @@ public class FindSymbolsAlgorithm implements VisitorAlgorithm {
                         System.out.println("je tente " + symbol);
 
                         if (!temporarySequence.toString().substring(0, currentColumn).contains(symbol)) {
+                        //if (!temporarySequence.toString().contains(symbol)) {
                             System.out.println(" ce symbol n'est pas présent dans la sequence -> il est retenu");
                             //temporarySequence = sequence.duplicate();
                             oldSymbol = new Symbol(currentColumn, sequence.getSymbols().get(currentColumn));

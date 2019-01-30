@@ -7,6 +7,7 @@ import sam.guessgame.model.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 
 public class FindSymbolsAlgorithmTest {
 /*
@@ -35,10 +36,11 @@ public class FindSymbolsAlgorithmTest {
     @Ignore
     public void givenASequence_WhenReplacingOneSymbol_ThenNewSequenceIsValid(){
 
-        Candidat candidat = new Candidat(new ArrayList<String>(Arrays.asList(new String[]{"D"})),
-                new ArrayList<String>(Arrays.asList(new String[]{"B", "C", "E", "F"})),
-                new ArrayList<String>(Arrays.asList(new String[]{"A"})),
-                new ArrayList<String>(Arrays.asList(new String[]{"B","C","E","F"})));
+        Candidat candidat = new Candidat(4, null);
+        candidat.candidatSequence.set(0, new ArrayList<String>(Arrays.asList(new String[]{"D"})));
+        candidat.candidatSequence.set(1, new ArrayList<String>(Arrays.asList(new String[]{"B", "C", "E", "F"})));
+        candidat.candidatSequence.set(2, new ArrayList<String>(Arrays.asList(new String[]{"A"})));
+        candidat.candidatSequence.set(3, new ArrayList<String>(Arrays.asList(new String[]{"B","C","E","F"})));
 
         FindSymbolsAlgorithm algo = new FindSymbolsAlgorithm(candidat);
 
@@ -61,11 +63,11 @@ public class FindSymbolsAlgorithmTest {
 
     @Test
     public void fix(){
-        Candidat candidat = new Candidat(
-                new ArrayList<String>(Arrays.asList(new String[]{"D"})),
-                new ArrayList<String>(Arrays.asList(new String[]{"C"})),
-                new ArrayList<String>(Arrays.asList(new String[]{"A", "B", "H"})),
-                new ArrayList<String>(Arrays.asList(new String[]{"A","B","H"})));
+        Candidat candidat = new Candidat(4, new String[]{});
+        candidat.candidatSequence.set(0, new ArrayList<String>(Arrays.asList(new String[]{"D"})));
+        candidat.candidatSequence.set(1, new ArrayList<String>(Arrays.asList(new String[]{"C"})));
+        candidat.candidatSequence.set(2, new ArrayList<String>(Arrays.asList(new String[]{"A", "B", "H"})));
+        candidat.candidatSequence.set(3, new ArrayList<String>(Arrays.asList(new String[]{"A", "B", "H"})));
 
         Session session  = new Session();
         session.rounds.add(new Round(new Sequence(new String[]{"D","E","C","B"}), new Result(1,1)));
@@ -78,8 +80,12 @@ public class FindSymbolsAlgorithmTest {
         session.rounds.add(new Round(new Sequence(new String[]{"A","C","H","B"}), new Result(1,2)));
 
         FindSymbolsAlgorithm algo = new FindSymbolsAlgorithm(candidat);
+        Optional<Sequence> sequence = algo.replaceOneSymbolByCandidateInSequence(new Sequence(new String[]{"A","C","H","B"}), session);
+
+        System.out.println(sequence.get().toString());
+
 //        algo.replaceOneSymbolByCandidateInSequence(new Sequence(new String[]{"A","C","H","B"}), session).toString();
-        System.out.println(algo.replaceOneSymbolByCandidateInSequence(new Sequence(new String[]{"A","C","H","B"}), session).toString());
+//        System.out.println(algo.replaceOneSymbolByCandidateInSequence(new Sequence(new String[]{"A","C","H","B"}), session).toString());
 
     }
 }

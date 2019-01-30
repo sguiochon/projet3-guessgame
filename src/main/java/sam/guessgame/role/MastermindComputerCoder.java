@@ -1,21 +1,31 @@
 package sam.guessgame.role;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import sam.guessgame.model.Candidat;
 import sam.guessgame.model.Sequence;
 import sam.guessgame.model.Result;
 
-
+@Component
 public class MastermindComputerCoder extends Initializer implements IMastermindCoder {
 
-    private Sequence winningSequence;
+    private final static Logger LOGGER = LoggerFactory.getLogger(MastermindComputerCoder.class.getName());
 
+    public Sequence winningSequence;
+
+/*
     public MastermindComputerCoder(Candidat candidat){
         super(candidat);
-    }
+        LOGGER.debug("creation");
+    }*/
 
+    /*
     public MastermindComputerCoder(Sequence winningSequence){
         super(winningSequence);
+        LOGGER.debug("creation2");
     }
+    */
 
     public Sequence getWinningSequence(){
         return winningSequence;
@@ -23,11 +33,16 @@ public class MastermindComputerCoder extends Initializer implements IMastermindC
 
     @Override
     public void initSequence() {
-        if (candidat!=null)
+        //LOGGER.debug("initSequence", this);
+        if (candidat!=null) {
             winningSequence = candidat.generateRandomSequence();
-        else
+            LOGGER.debug("Séquence aléatoire");
+        }
+        else {
             winningSequence = startingSequence;
-        System.out.println(">>>Coder.winningSequence: " + winningSequence.toString());
+            LOGGER.debug("Séquence spécifiée (pas aléatoirement)");
+        }
+        LOGGER.debug("initSequence -> winning sequence: " + winningSequence.toString());
     }
 
 

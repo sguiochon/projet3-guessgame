@@ -10,7 +10,10 @@ public class SessionTest {
     @Test
     public void givenNothing_WhenCreatingADecoder_ThenItContainsaValidSession(){
 
-        MastermindComputerDecoder computerDecoder = new MastermindComputerDecoder(new Candidat(3, new String[]{"A", "B", "C", "D", "E", "F"}));
+        MastermindComputerDecoder computerDecoder = new MastermindComputerDecoder();
+        computerDecoder.candidat = new Candidat(3, new String[]{"A", "B", "C", "D", "E", "F"});
+        computerDecoder.initSequence();
+
         Sequence sequence = computerDecoder.generateAttempt(new Session());
 
         System.out.println(sequence.toString());

@@ -1,6 +1,9 @@
 package sam.guessgame;
 
 public interface IGameMode {
-    public void run(GameType gameType);
-    public void init(GameType gameType);
+
+    void init(GameType gameType);
+    void run(GameType gameType);
+    String getDescription();
+
 }

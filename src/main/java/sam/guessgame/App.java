@@ -13,7 +13,7 @@ import sam.guessgame.role.MastermindGame;
 import java.util.Scanner;
 
 @Configuration
-@ComponentScan(basePackages = {"sam.guessgame", "sam.guessgame.role"})
+@ComponentScan(basePackages = {"sam.guessgame", "sam.guessgame.role", "sam.guessgame.model"})
 @PropertySource("classpath:config.properties")
 public class App {
 
@@ -22,13 +22,13 @@ public class App {
     @Autowired
     GameModeFactory factory;
 
+    @Autowired
+    InputScanner inputScanner;
+
     public static void main(String[] args) {
-
         ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(App.class);
-
         App app = ctx.getBean(App.class);
         app.run();
-
     }
 
     private void run(){
@@ -36,11 +36,11 @@ public class App {
         GameMode gameMode = null;
         GameType gameType = null;
 
-        System.out.println("Sélectionnez le type de jeu");
-        gameType = GameType.getByInternalValue(inputFromKeyboard(GameType.getDescription(), GameType.getInternalValues()));
+        System.out.println("Quel type de jeu choisissez-vous?");
+        gameType = GameType.getByInternalValue(inputScanner.inputIntegerFromArray(GameType.getDescription(), GameType.getInternalValues()));
 
-        System.out.println("Sélectionnez le mode de jeu");
-        gameMode = GameMode.getByInternalValue(inputFromKeyboard(GameMode.getDescription(), GameMode.getInternalValues()));
+        System.out.println("Quel mode de jeu choisissez-vous?");
+        gameMode = GameMode.getByInternalValue(inputScanner.inputIntegerFromArray(GameMode.getDescription(), GameMode.getInternalValues()));
 
         LOGGER.debug("Type de jeu: " + gameType, gameType);
         LOGGER.debug("Mode de jeu: " + gameMode, gameMode);
@@ -52,26 +52,4 @@ public class App {
 
     }
 
-    private int inputFromKeyboard(String message, int... authorizedValues){
-        Scanner scanner = new Scanner(System.in);
-        boolean isValidInput = false;
-        int intInput = 0;
-        do {
-            System.out.println(message);
-            String input = scanner.next();
-            scanner.nextLine();
-            try{
-                intInput = Integer.parseInt(input);
-            }
-            catch(NumberFormatException e){
-                System.out.println("Valeur saisie non valide...");
-            }
-            for (int val : authorizedValues){
-                if (val==intInput)
-                    isValidInput = true;
-            }
-        }
-        while(!isValidInput);
-        return intInput;
-    }
 }

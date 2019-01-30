@@ -32,10 +32,11 @@ public class CandidatTest {
     @Test
     public void givenACandidat_WhenFoundAllSymbols_ThenCandidatProperlyUpdated(){
 
-        Candidat candidat = new Candidat(new ArrayList<String>(Arrays.asList(new String[]{"D"})),
-                new ArrayList<String>(Arrays.asList(new String[]{"B", "C", "E", "F"})),
-                new ArrayList<String>(Arrays.asList(new String[]{"A"})),
-                new ArrayList<String>(Arrays.asList(new String[]{"B","C","E","F"})));
+        Candidat candidat = new Candidat(4, new String[]{""});
+        candidat.candidatSequence.set(0, new ArrayList<String>(Arrays.asList(new String[]{"D"})));
+        candidat.candidatSequence.set(1, new ArrayList<String>(Arrays.asList(new String[]{"B", "C", "E", "F"})));
+        candidat.candidatSequence.set(2, new ArrayList<String>(Arrays.asList(new String[]{"A"})));
+        candidat.candidatSequence.set(3, new ArrayList<String>(Arrays.asList(new String[]{"B","C","E","F"})));
 
         candidat.validSymbols(new Sequence("A", "D", "B", "C"));
 
@@ -45,11 +46,12 @@ public class CandidatTest {
 
     @Test
     public void givenACandidat_WhenGeneratingRandomSequence_ThenSequenceIsValid(){
-        Candidat candidat = new Candidat(
-                new ArrayList<String>(Arrays.asList(new String[]{"D"})),
-                new ArrayList<String>(Arrays.asList(new String[]{"B"})),
-                new ArrayList<String>(Arrays.asList(new String[]{"A"})),
-                new ArrayList<String>(Arrays.asList(new String[]{"C"})));
+        Candidat candidat = new Candidat(4, new String[]{""});
+        candidat.candidatSequence.set(0, new ArrayList<String>(Arrays.asList(new String[]{"D"})));
+        candidat.candidatSequence.set(1, new ArrayList<String>(Arrays.asList(new String[]{"B"})));
+        candidat.candidatSequence.set(2, new ArrayList<String>(Arrays.asList(new String[]{"A"})));
+        candidat.candidatSequence.set(3, new ArrayList<String>(Arrays.asList(new String[]{"C"})));
+
         Assert.assertTrue("D B A C".equals(candidat.generateRandomSequence().toString()));
 
     }
