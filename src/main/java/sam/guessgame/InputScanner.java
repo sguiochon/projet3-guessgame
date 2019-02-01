@@ -6,10 +6,10 @@ import sam.guessgame.model.Sequence;
 import java.util.List;
 import java.util.Scanner;
 
-@Component
+
 public class InputScanner {
 
-    public int inputIntegerFromArray(String message, int... authorizedValues) {
+    public static int inputIntegerFromArray(String message, int... authorizedValues) {
         boolean isValidInput = false;
         int intInput = -1;
         do {
@@ -29,7 +29,7 @@ public class InputScanner {
         return intInput;
     }
 
-    public int inputIntegerFromMinMax(String message, int min, int max) {
+    public static int inputIntegerFromMinMax(String message, int min, int max) {
         boolean isValidInput = false;
         int intInput = -1;
         do {
@@ -45,7 +45,7 @@ public class InputScanner {
         return intInput;
     }
 
-    public Sequence inputSequence(String message, int sequenceSize, List<String> authorizedValues, boolean uniqueSymbolsOnly) {
+    public static Sequence inputSequence(String message, int sequenceSize, List<String> authorizedValues, boolean uniqueSymbolsOnly) {
         Scanner scanner = new Scanner(System.in);
         String listOfSymbols = authorizedValues.stream().reduce("", (a, b) -> a + " " + b);
         String input;
@@ -91,7 +91,7 @@ public class InputScanner {
     */
 
 
-    private int scanInt(String message) {
+    private static int scanInt(String message) {
         Scanner scanner = new Scanner(System.in);
         int intInput = -1;
 

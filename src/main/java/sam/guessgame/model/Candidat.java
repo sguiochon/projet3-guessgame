@@ -149,7 +149,7 @@ public class Candidat {
         return true;
     }
 
-    public Sequence generateRandomSequence() {
+    public Sequence generateRandomSequence(boolean onlyUniqueSymbol) {
         LOGGER.debug("Generate random sequence..." + this.toString());
         Sequence sequence = new Sequence();
         Candidat workCandidat = this.duplicate();
@@ -158,8 +158,10 @@ public class Candidat {
             int r = random.nextInt(possiblesValues.size());
             String selectedSymbol = possiblesValues.get(r);
             sequence.addSymbol(selectedSymbol);
-            for (int j = currentColumn + 1; j < workCandidat.candidatSequence.size(); j++) {
-                workCandidat.candidatSequence.get(j).remove(selectedSymbol);
+            if (onlyUniqueSymbol) {
+                for (int j = currentColumn + 1; j < workCandidat.candidatSequence.size(); j++) {
+                    workCandidat.candidatSequence.get(j).remove(selectedSymbol);
+                }
             }
         }
         return sequence;

@@ -31,7 +31,7 @@ public class PlusMinusComputerDecoder extends Initializer implements IDecoder<Pl
     @Override
     public void initSequence() {
         if (startingSequence == null)
-            startingSequence = candidat.generateRandomSequence();
+            startingSequence = candidat.generateRandomSequence(false);
         algo = new FindIntegersAlgorithm(candidat);
     }
 }

@@ -16,7 +16,7 @@ public class MastermindComputerDecoder extends Initializer implements IDecoder<M
     @Override
     public void initSequence(){
         if (startingSequence==null)
-            startingSequence = candidat.generateRandomSequence();
+            startingSequence = candidat.generateRandomSequence(true);
         algo1 = new FindSymbolsAlgorithm(candidat);
     }
 

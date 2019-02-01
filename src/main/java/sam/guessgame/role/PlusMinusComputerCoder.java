@@ -52,7 +52,7 @@ public class PlusMinusComputerCoder extends Initializer implements ICoder<PlusMi
     public void initSequence() {
         //LOGGER.debug("initSequence", this);
         if (candidat!=null) {
-            winningSequence = candidat.generateRandomSequence();
+            winningSequence = candidat.generateRandomSequence(true);
             LOGGER.debug("Séquence aléatoire");
         }
         else {

@@ -19,9 +19,6 @@ public class App {
     @Autowired
     GameModeFactory factory;
 
-    @Autowired
-    InputScanner inputScanner;
-
     public static void main(String[] args) {
         ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(App.class);
         App app = ctx.getBean(App.class);
@@ -34,10 +31,10 @@ public class App {
         GameType gameType = null;
 
         System.out.println("Quel type de jeu choisissez-vous?");
-        gameType = GameType.getByInternalValue(inputScanner.inputIntegerFromArray(GameType.getDescription(), GameType.getInternalValues()));
+        gameType = GameType.getByInternalValue(InputScanner.inputIntegerFromArray(GameType.getDescription(), GameType.getInternalValues()));
 
         System.out.println("Quel mode de jeu choisissez-vous?");
-        gameMode = GameMode.getByInternalValue(inputScanner.inputIntegerFromArray(GameMode.getDescriptions(), GameMode.getInternalValues()));
+        gameMode = GameMode.getByInternalValue(InputScanner.inputIntegerFromArray(GameMode.getDescriptions(), GameMode.getInternalValues()));
 
         LOGGER.debug("Type de jeu: " + gameType, gameType);
         LOGGER.debug("Mode de jeu: " + gameMode, gameMode);

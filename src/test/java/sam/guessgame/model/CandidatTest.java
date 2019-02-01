@@ -52,7 +52,20 @@ public class CandidatTest {
         candidat.candidatSequence.set(2, new ArrayList<String>(Arrays.asList(new String[]{"A"})));
         candidat.candidatSequence.set(3, new ArrayList<String>(Arrays.asList(new String[]{"C"})));
 
-        Assert.assertTrue("D B A C".equals(candidat.generateRandomSequence().toString()));
+        Assert.assertTrue("D B A C".equals(candidat.generateRandomSequence(true).toString()));
+
+    }
+
+    @Test
+    public void givenACandidat_WhenGeneratingRandomSequence_ThenSequenceIsValid2(){
+        Candidat candidat = new Candidat(4, new String[]{""});
+        candidat.candidatSequence.set(0, new ArrayList<String>(Arrays.asList(new String[]{"1", "2", "3","4"})));
+        candidat.candidatSequence.set(1, new ArrayList<String>(Arrays.asList(new String[]{"0"})));
+        candidat.candidatSequence.set(2, new ArrayList<String>(Arrays.asList(new String[]{"2"})));
+        candidat.candidatSequence.set(3, new ArrayList<String>(Arrays.asList(new String[]{"7", "8", "9"})));
+
+        candidat.generateRandomSequence(false).toString();
+
 
     }
 }

@@ -96,7 +96,7 @@ public class FindSymbolsAlgorithm implements VisitorAlgorithm<MastermindResult> 
         }
         // Suiet à l'affinage de Candidat, si la solution est trouvée, on la propose:
         if (candidat.isSolution()){
-            return candidat.generateRandomSequence();
+            return candidat.generateRandomSequence(true);
         }
         // Sinon, on propose maintenant une nouvelle sequence
         // en changeant 1 seul symbol :

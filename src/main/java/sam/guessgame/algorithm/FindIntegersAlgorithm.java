@@ -28,6 +28,7 @@ public class FindIntegersAlgorithm  implements VisitorAlgorithm<PlusMinusResult>
         System.out.println("!!!!! attempt " + attempt);
         System.out.println("!!!!! result " + result);
 
+        // Elimination de candidats
         int position = 0;
         for (String symbol : attempt.getSymbols()){
             int intSymbol = Integer.parseInt(symbol);
@@ -36,13 +37,11 @@ public class FindIntegersAlgorithm  implements VisitorAlgorithm<PlusMinusResult>
                 case Moins:
                     System.out.println("Moins");
                     for (int j=intSymbol; j<=9; j++){
-                        //wrongSymbols+=String.valueOf(j);
                         candidat.invalidSymbolAt(position, new Symbol(0, String.valueOf(j)));
                     }
                     break;
                 case Plus:
                     for (int j=0; j<=intSymbol; j++){
-                        //wrongSymbols+=String.valueOf(j);
                         candidat.invalidSymbolAt(position, new Symbol(0, String.valueOf(j)));
                     }
                     break;
@@ -50,13 +49,10 @@ public class FindIntegersAlgorithm  implements VisitorAlgorithm<PlusMinusResult>
                     candidat.candidatSequence.set(position, Arrays.asList(symbol));
                     break;
             }
-
-
             position++;
         }
 
         System.out.println("new candidat ----> "+ candidat.toString());
-
-        return null;
+        return candidat.generateRandomSequence(false);
     }
 }
