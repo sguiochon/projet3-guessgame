@@ -8,9 +8,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import sam.guessgame.role.MastermindGame;
-
-import java.util.Scanner;
 
 @Configuration
 @ComponentScan(basePackages = {"sam.guessgame", "sam.guessgame.role", "sam.guessgame.model"})
@@ -31,7 +28,7 @@ public class App {
         app.run();
     }
 
-    private void run(){
+    private void run() {
 
         GameMode gameMode = null;
         GameType gameType = null;
@@ -40,15 +37,15 @@ public class App {
         gameType = GameType.getByInternalValue(inputScanner.inputIntegerFromArray(GameType.getDescription(), GameType.getInternalValues()));
 
         System.out.println("Quel mode de jeu choisissez-vous?");
-        gameMode = GameMode.getByInternalValue(inputScanner.inputIntegerFromArray(GameMode.getDescription(), GameMode.getInternalValues()));
+        gameMode = GameMode.getByInternalValue(inputScanner.inputIntegerFromArray(GameMode.getDescriptions(), GameMode.getInternalValues()));
 
         LOGGER.debug("Type de jeu: " + gameType, gameType);
         LOGGER.debug("Mode de jeu: " + gameMode, gameMode);
-        
-        IGameMode game = factory.getGameMode(gameMode);
 
-        game.init(gameType);
-        game.run(gameType);
+        IGameMode game = factory.getGameMode(gameMode, gameType);
+
+        game.init();
+        game.run();
 
     }
 

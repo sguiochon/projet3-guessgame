@@ -1,19 +1,20 @@
 package sam.guessgame.model;
 
-public class Result {
+public class MastermindResult implements IResult{
 
     private int nbCorrectPosition;
     private int nbCorrectSymbol;
 
-    public Result(int nbCorrectPosition, int nbCorrectSymbol) {
+    public MastermindResult(int nbCorrectPosition, int nbCorrectSymbol) {
         this.nbCorrectPosition = nbCorrectPosition;
         this.nbCorrectSymbol = nbCorrectSymbol;
     }
 
-    public Result() {
+    public MastermindResult() {
         this(0,0);
     }
 
+    @Override
     public int getNbCorrectPosition() {
         return nbCorrectPosition;
     }

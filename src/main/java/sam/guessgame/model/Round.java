@@ -1,16 +1,17 @@
 package sam.guessgame.model;
 
-public class Round {
+public class Round<T extends IResult> {
 
     private Sequence attempt;
 
-    private Result result;
+    //private MastermindResult result;
+    private T result;
 
     public Round(Sequence sequence){
         this(sequence, null);
     }
 
-    public Round(Sequence attempt, Result result) {
+    public Round(Sequence attempt, T result) {
         this.attempt = attempt;
         this.result = result;
     }
@@ -23,11 +24,14 @@ public class Round {
         this.attempt = attempt;
     }
 
-    public Result getResult() {
+    //public MastermindResult getResult() {
+    //    return result;
+    //}
+    public T getResult() {
         return result;
     }
 
-    public void setResult(Result result) {
+    public void setResult(T result) {
         this.result = result;
     }
 

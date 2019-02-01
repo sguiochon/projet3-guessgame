@@ -10,15 +10,13 @@
   
   <packaging>jar</packaging>
 
-  <name>hello</name>
-
+  <name>Guess Game - Project #3 [Software Academy/OpenClassrooms]</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
-
 
   <dependencies>
     <dependency>
@@ -27,24 +25,51 @@
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
-
     <!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
       <version>5.1.4.RELEASE</version>
     </dependency>
-
     <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12 -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
       <version>1.7.25</version>
     </dependency>
-
-
-
   </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>sam.guessgame.App</mainClass>
+                    <arguments>
+                        <argument>argument1</argument>
+                    </arguments>
+                    <!--<systemProperties>
+                        <systemProperty>
+                            <key>myproperty</key>
+                            <value>myvalue</value>
+                        </systemProperty>
+                        ...
+                    </systemProperties>-->
+                </configuration>
+            </plugin>
+
+        </plugins>
+
+    </build>
 
 
 </project>

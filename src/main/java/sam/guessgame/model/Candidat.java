@@ -2,27 +2,24 @@ package sam.guessgame.model;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-import sam.guessgame.App;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
-@Component
-@Scope("prototype")
 public class Candidat {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(Candidat.class.getName());
 
-    private final static Random random = new Random(System.currentTimeMillis());;
+    private final static Random random = new Random(System.currentTimeMillis());
 
     public List<List<String>> candidatSequence;
     List<String> potentialIncorrectPairs;
 
-    public Candidat(@Value("${sequence.size}") int sequenceSize, @Value("${list.of.symbols}")String[] possibleValues){
+    public Candidat(int sequenceSize, String[] possibleValues) {
         candidatSequence = new ArrayList<List<String>>();
-        for (int i=0; i<sequenceSize; i++){
+        for (int i = 0; i < sequenceSize; i++) {
             candidatSequence.add(new ArrayList<String>(Arrays.asList(possibleValues)));
         }
         LOGGER.debug("Candidat instance created");
@@ -46,26 +43,26 @@ public class Candidat {
         candidatSequence = new ArrayList<List<String>>();
     }*/
 
-    public Candidat duplicate(){
+    public Candidat duplicate() {
         Candidat mirror = new Candidat(0, null);
-        for (List<String> items : this.candidatSequence){
+        for (List<String> items : this.candidatSequence) {
             mirror.candidatSequence.add(new ArrayList(items));
         }
         return mirror;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         StringBuilder str = new StringBuilder();
         boolean isStartPosition1 = true;
-        for (List<String> symbols : candidatSequence){
+        for (List<String> symbols : candidatSequence) {
             if (!isStartPosition1)
                 str.append("-");
             else
                 isStartPosition1 = false;
             str.append("(");
             boolean isStartPosition2 = true;
-            for (String symbol : symbols){
+            for (String symbol : symbols) {
                 if (!isStartPosition2)
                     str.append(",");
                 else
@@ -79,15 +76,16 @@ public class Candidat {
 
     /**
      * Reduces the number of candidat symbols based on the exhaustive list of valid symbol.
+     *
      * @param validSequence: sequence made of correct symbols (whether correctly positionned ot not) that must persist in the Candidate instance. Other symbols must be removed as being not valid.
      */
-    public void validSymbols(Sequence validSequence){
+    public void validSymbols(Sequence validSequence) {
         String validSymbols = validSequence.toString();
-        for (List<String> symbols : candidatSequence){
+        for (List<String> symbols : candidatSequence) {
             String[] tempoSymbols = symbols.toArray(new String[0]);
-            for (int i=0; i<tempoSymbols.length; i++){
+            for (int i = 0; i < tempoSymbols.length; i++) {
                 String symbol = tempoSymbols[i];
-                if (!validSymbols.contains(symbol)){
+                if (!validSymbols.contains(symbol)) {
                     symbols.remove(symbol);
                 }
             }
@@ -96,16 +94,16 @@ public class Candidat {
 
     /**
      * Reduces the number of candidat symbols based on the known symbol at one specified position.
+     *
      * @param symbol
      */
     public void foundSymbol(Symbol symbol) {
         int currentColumn = 0;
-        for (List<String> symbols : candidatSequence){
-            if (currentColumn==symbol.column){
+        for (List<String> symbols : candidatSequence) {
+            if (currentColumn == symbol.column) {
                 // On ne garde que le symbol dans la liste des possibilités
                 candidatSequence.set(currentColumn, new ArrayList<>(Arrays.asList(symbol.symbol)));
-            }
-            else{
+            } else {
                 // On enlève le symbol de la liste car il n'est pas dans cette colonne:
                 symbols.remove(symbol.symbol);
             }
@@ -115,7 +113,7 @@ public class Candidat {
     }
 
     public void invalidSymbol(Symbol symbol, boolean recursive) {
-        for (List<String> symbols : candidatSequence){
+        for (List<String> symbols : candidatSequence) {
             symbols.remove(symbol.symbol);
         }
         System.out.println(">>> Elimination de  " + symbol.symbol);
@@ -131,32 +129,36 @@ public class Candidat {
         }
     }
 
-    public void invalidSymbol(Symbol symbol){
+    public void invalidSymbol(Symbol symbol) {
         invalidSymbol(symbol, true);
     }
 
+    public void invalidSymbolAt(int position, Symbol symbol){
+        candidatSequence.get(position).remove(symbol.symbol);
+    }
     /**
      * Returns true if the candidat is the solution, i.e. not uncertainty remains.
+     *
      * @return true or false
      */
-    public boolean isSolution(){
-        for (List<String> symbols: candidatSequence){
-            if (symbols.size()!=1)
+    public boolean isSolution() {
+        for (List<String> symbols : candidatSequence) {
+            if (symbols.size() != 1)
                 return false;
         }
         return true;
     }
 
-    public Sequence generateRandomSequence(){
+    public Sequence generateRandomSequence() {
         LOGGER.debug("Generate random sequence..." + this.toString());
         Sequence sequence = new Sequence();
         Candidat workCandidat = this.duplicate();
         int currentColumn = 0;
-        for (List<String> possiblesValues : workCandidat.candidatSequence){
+        for (List<String> possiblesValues : workCandidat.candidatSequence) {
             int r = random.nextInt(possiblesValues.size());
             String selectedSymbol = possiblesValues.get(r);
             sequence.addSymbol(selectedSymbol);
-            for (int j=currentColumn+1; j<workCandidat.candidatSequence.size(); j++){
+            for (int j = currentColumn + 1; j < workCandidat.candidatSequence.size(); j++) {
                 workCandidat.candidatSequence.get(j).remove(selectedSymbol);
             }
         }
@@ -165,9 +167,9 @@ public class Candidat {
 
 
     public void storePotentialIncorrectPairs(Symbol oldSymbol, Symbol newSymbol) {
-        if (potentialIncorrectPairs==null)
+        if (potentialIncorrectPairs == null)
             potentialIncorrectPairs = new ArrayList<>();
-        potentialIncorrectPairs.add(oldSymbol.symbol+newSymbol.symbol);
+        potentialIncorrectPairs.add(oldSymbol.symbol + newSymbol.symbol);
         System.out.println(">>>*** Peut etre tous les deux incorrects :" + oldSymbol.symbol + " et " + newSymbol.symbol);
     }
 
@@ -175,9 +177,9 @@ public class Candidat {
         System.out.println(">>>> " + temporarySequence.toString());
         int nbAdjustement = 0;
         int positionNb = 0;
-        for(List<String> symbols : candidatSequence){
-            if (symbols.size()==1) {
-                if (!temporarySequence.getSymbolAt(positionNb).equals(symbols.get(0))){
+        for (List<String> symbols : candidatSequence) {
+            if (symbols.size() == 1) {
+                if (!temporarySequence.getSymbolAt(positionNb).equals(symbols.get(0))) {
                     temporarySequence.setSymbolAt(positionNb, symbols.get(0));
                     nbAdjustement++;
                 }

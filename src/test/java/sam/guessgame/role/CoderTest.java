@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import sam.guessgame.model.Candidat;
-import sam.guessgame.model.Result;
+import sam.guessgame.model.MastermindResult;
 import sam.guessgame.model.Sequence;
 
 public class CoderTest {
@@ -19,8 +19,7 @@ public class CoderTest {
         Assert.assertTrue(hasNoDuplicatedSymbol(new Sequence(new String[]{"5", "3"})));
         Assert.assertTrue(!hasNoDuplicatedSymbol(new Sequence(new String[]{"6", "3", "A", "6"})));
 
-        MastermindComputerCoder coder = new MastermindComputerCoder();
-        coder.candidat = new Candidat(4, new String[] {"A", "B", "C", "D", "E", "F", "G"});
+        MastermindComputerCoder coder = new MastermindComputerCoder(new Candidat(4, new String[] {"A", "B", "C", "D", "E", "F", "G"}));
         coder.initSequence();
         System.out.println("Coder.winningSequence: " + coder.getWinningSequence().toString());
         Assert.assertTrue(hasNoDuplicatedSymbol(coder.getWinningSequence()));
@@ -28,9 +27,8 @@ public class CoderTest {
 
     @Test
     public void givenCoder_WhenSubmittingSequence_ThenCoderResultIsValid(){
-        Result result;
-        MastermindComputerCoder coder = new MastermindComputerCoder();
-        coder.candidat = new Candidat(4, new String[] {"A", "B", "C", "D"});
+        MastermindResult result;
+        MastermindComputerCoder coder = new MastermindComputerCoder(new Candidat(4, new String[] {"A", "B", "C", "D"}));
         coder.initSequence();
         result = coder.evaluateAttempt(coder.getWinningSequence());
         Assert.assertTrue(result.getNbCorrectPosition()==4);

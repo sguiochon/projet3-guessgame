@@ -4,9 +4,9 @@ import sam.guessgame.algorithm.VisitorAlgorithm;
 
 import java.util.*;
 
-public class Session implements Visitable{
+public class Session<T extends IResult> implements Visitable{
 
-    public List<Round> rounds = new ArrayList<Round>();
+    public List<Round<T>> rounds = new ArrayList<Round<T>>();
 
     //public void addRound(Round round){
     //    rounds.add(round);

@@ -10,8 +10,8 @@ public abstract class Initializer implements ISequenceInitializer {
 
     private final static Random random = new Random(System.currentTimeMillis());;
 
-    @Autowired
-    protected Candidat candidat;
+    //@Autowired
+    public Candidat candidat;
 
     protected Sequence startingSequence;
 
@@ -19,9 +19,9 @@ public abstract class Initializer implements ISequenceInitializer {
     public Initializer(Sequence sequence){
         this.startingSequence = sequence;
     }
-
+*/
     public Initializer(Candidat candidat){
         this.candidat = candidat;
     }
-*/
+
 }

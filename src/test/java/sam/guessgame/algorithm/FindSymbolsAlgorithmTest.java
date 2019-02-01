@@ -53,7 +53,7 @@ public class FindSymbolsAlgorithmTest {
         Assert.assertTrue("D C A F".equals(newSequence.toString()));
 
         // Ici, on fournit un historique afin de vérifier que la nouvelle sequence n'est pas dedans
-        Session session = new Session();
+        Session<MastermindResult> session = new Session();
         Round round = new Round(new Sequence("D", "C", "A", "F"));
         session.rounds.add(round);newSequence = algo.replaceOneSymbolByCandidateInSequence(sequence, session).get();
         System.out.println("New sequence using history: " + newSequence.toString());
@@ -70,14 +70,14 @@ public class FindSymbolsAlgorithmTest {
         candidat.candidatSequence.set(3, new ArrayList<String>(Arrays.asList(new String[]{"A", "B", "H"})));
 
         Session session  = new Session();
-        session.rounds.add(new Round(new Sequence(new String[]{"D","E","C","B"}), new Result(1,1)));
-        session.rounds.add(new Round(new Sequence(new String[]{"A","E","C","B"}), new Result(0,2)));
-        session.rounds.add(new Round(new Sequence(new String[]{"A","F","C","B"}), new Result(0,2)));
-        session.rounds.add(new Round(new Sequence(new String[]{"A","G","C","B"}), new Result(0,2)));
-        session.rounds.add(new Round(new Sequence(new String[]{"A","H","C","B"}), new Result(0,3)));
-        session.rounds.add(new Round(new Sequence(new String[]{"A","H","E","B"}), new Result(0,2)));
-        session.rounds.add(new Round(new Sequence(new String[]{"A","C","E","B"}), new Result(1,1)));
-        session.rounds.add(new Round(new Sequence(new String[]{"A","C","H","B"}), new Result(1,2)));
+        session.rounds.add(new Round(new Sequence(new String[]{"D","E","C","B"}), new MastermindResult(1,1)));
+        session.rounds.add(new Round(new Sequence(new String[]{"A","E","C","B"}), new MastermindResult(0,2)));
+        session.rounds.add(new Round(new Sequence(new String[]{"A","F","C","B"}), new MastermindResult(0,2)));
+        session.rounds.add(new Round(new Sequence(new String[]{"A","G","C","B"}), new MastermindResult(0,2)));
+        session.rounds.add(new Round(new Sequence(new String[]{"A","H","C","B"}), new MastermindResult(0,3)));
+        session.rounds.add(new Round(new Sequence(new String[]{"A","H","E","B"}), new MastermindResult(0,2)));
+        session.rounds.add(new Round(new Sequence(new String[]{"A","C","E","B"}), new MastermindResult(1,1)));
+        session.rounds.add(new Round(new Sequence(new String[]{"A","C","H","B"}), new MastermindResult(1,2)));
 
         FindSymbolsAlgorithm algo = new FindSymbolsAlgorithm(candidat);
         Optional<Sequence> sequence = algo.replaceOneSymbolByCandidateInSequence(new Sequence(new String[]{"A","C","H","B"}), session);

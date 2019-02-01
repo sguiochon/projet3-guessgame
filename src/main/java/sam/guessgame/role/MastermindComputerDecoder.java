@@ -4,10 +4,14 @@ import org.springframework.stereotype.Component;
 import sam.guessgame.algorithm.FindSymbolsAlgorithm;
 import sam.guessgame.model.*;
 
-@Component
-public class MastermindComputerDecoder extends Initializer implements IMastermindDecoder {
+
+public class MastermindComputerDecoder extends Initializer implements IDecoder<MastermindResult> {
 
     private FindSymbolsAlgorithm algo1;
+
+    public MastermindComputerDecoder(Candidat candidat){
+        super(candidat);
+    }
 
     @Override
     public void initSequence(){
@@ -17,15 +21,15 @@ public class MastermindComputerDecoder extends Initializer implements IMastermin
     }
 
     @Override
-    public Sequence generateAttempt(Session session) {
+    public Sequence generateAttempt(Session<MastermindResult> session) {
         Sequence attempt = null;
         if (session.rounds.isEmpty()) {
             // first attempt is random
             attempt = startingSequence;
         }
         else {
-            Round lastRound = session.rounds.get(session.rounds.size()-1);
-            Result lastResult = lastRound.getResult();
+            Round<MastermindResult> lastRound = session.rounds.get(session.rounds.size()-1);
+            MastermindResult lastResult = (MastermindResult) lastRound.getResult();
 
             if (lastResult.getNbCorrectSymbol() + lastResult.getNbCorrectPosition() == candidat.candidatSequence.size()) {
                 System.out.println("Tous les symbols sont identifiés...");

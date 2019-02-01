@@ -2,7 +2,6 @@ package sam.guessgame.algorithm;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sam.guessgame.DefenseurMode;
 import sam.guessgame.exception.AlgorithmException;
 import sam.guessgame.model.*;
 
@@ -10,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-public class FindSymbolsAlgorithm implements VisitorAlgorithm {
+public class FindSymbolsAlgorithm implements VisitorAlgorithm<MastermindResult> {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(FindSymbolsAlgorithm.class.getName());
 
@@ -26,14 +25,14 @@ public class FindSymbolsAlgorithm implements VisitorAlgorithm {
     }
 
     @Override
-    public Sequence visit(Session session){
+    public Sequence visit(Session<MastermindResult> session){
 
         int nbRounds = session.rounds.size();
 
         // Analyse de l'écart entre les résultats des deux derniers essais:
         if (nbRounds>=2){
-            Round lastRound = session.rounds.get(nbRounds-1);
-            Round previousRound = session.rounds.get(nbRounds-2);
+            Round<MastermindResult> lastRound = session.rounds.get(nbRounds-1);
+            Round<MastermindResult> previousRound = session.rounds.get(nbRounds-2);
 
             int deltaNbCorrectPosition = lastRound.getResult().getNbCorrectPosition() - previousRound.getResult().getNbCorrectPosition();
             int deltaNbCorrectSymbol = lastRound.getResult().getNbCorrectSymbol() - previousRound.getResult().getNbCorrectSymbol();
@@ -113,7 +112,7 @@ public class FindSymbolsAlgorithm implements VisitorAlgorithm {
 
     }
 
-    public Optional<Sequence> replaceOneSymbolByCandidateInSequence(final Sequence sequence, final Session session){
+    public Optional<Sequence> replaceOneSymbolByCandidateInSequence(final Sequence sequence, final Session<MastermindResult> session){
         //System.out.println("Options possibles: " + candidat.toString());
 
         String stringSequence = sequence.toString();
@@ -150,7 +149,7 @@ public class FindSymbolsAlgorithm implements VisitorAlgorithm {
 
                             if (session != null) { // Si un historique des sequences est fourni à l'appel de la méthode, on s'assure que la nouvelle sequence n'a pas déjà été proposée
                                 boolean isAlreadySubmitted = false;
-                                for (Round round : session.rounds) {
+                                for (Round<MastermindResult> round : session.rounds) {
                                     if (round.getAttempt().toString().contains(temporarySequence.toString())) {
                                         System.out.println("Cette sequence a deja ete soumise: " + temporarySequence.toString());
                                         isAlreadySubmitted = true;

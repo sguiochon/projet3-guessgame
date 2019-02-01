@@ -5,9 +5,9 @@ import java.util.EnumSet;
 import java.util.List;
 
 public enum GameMode {
-    Challenger (1, "vous devez trouver la combinaison de l'ordinateur"),
-    Defenseur (2, "l'ordinateur doit trouver votre combinaison"),
-    Spectateur(3, "ordinateur contre ordinateur"),
+    Challenger (1, "Vous devez trouver la combinaison de l'ordinateur"),
+    Defenseur (2, "L'ordinateur doit trouver votre combinaison"),
+    Spectateur(3, "Ordinateur contre ordinateur"),
     Duel(4, "Duel homme/ordinateur");
 
     private static List<GameMode> gameModes = new ArrayList<GameMode>(EnumSet.of(Challenger, Defenseur, Spectateur, Duel));
@@ -20,7 +20,7 @@ public enum GameMode {
         this.description = description;
     }
 
-    static String getDescription(){
+    static String getDescriptions(){
         String description = "";
         for (GameMode gameMode : gameModes){
             description = description + gameMode.toString();
