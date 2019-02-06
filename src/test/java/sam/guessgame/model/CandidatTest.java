@@ -64,8 +64,22 @@ public class CandidatTest {
         candidat.candidatSequence.set(2, new ArrayList<String>(Arrays.asList(new String[]{"2"})));
         candidat.candidatSequence.set(3, new ArrayList<String>(Arrays.asList(new String[]{"7", "8", "9"})));
 
-        candidat.generateRandomSequence(false).toString();
+        System.out.println(candidat.generateRandomSequence(false).toString());
 
 
     }
+
+    @Test
+    public void givenACandidat_WhenGeneratingRandomSequence_TheProcessingOrderIsAdapted(){
+        Candidat candidat = new Candidat(4, new String[]{""});
+        candidat.candidatSequence.set(0, new ArrayList<String>(Arrays.asList(new String[]{"D", "F", "G","H"})));
+        candidat.candidatSequence.set(1, new ArrayList<String>(Arrays.asList(new String[]{"D","F","G","H"})));
+        candidat.candidatSequence.set(2, new ArrayList<String>(Arrays.asList(new String[]{"D","H"})));
+        candidat.candidatSequence.set(3, new ArrayList<String>(Arrays.asList(new String[]{"D", "H"})));
+
+        System.out.println(candidat.generateRandomSequence(true).toString());
+
+
+    }
+
 }

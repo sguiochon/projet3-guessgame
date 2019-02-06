@@ -36,7 +36,7 @@ public class FindSymbolsAlgorithmTest {
     @Ignore
     public void givenASequence_WhenReplacingOneSymbol_ThenNewSequenceIsValid(){
 
-        Candidat candidat = new Candidat(4, null);
+        Candidat candidat = new Candidat(4, new String[]{""});
         candidat.candidatSequence.set(0, new ArrayList<String>(Arrays.asList(new String[]{"D"})));
         candidat.candidatSequence.set(1, new ArrayList<String>(Arrays.asList(new String[]{"B", "C", "E", "F"})));
         candidat.candidatSequence.set(2, new ArrayList<String>(Arrays.asList(new String[]{"A"})));
@@ -46,7 +46,7 @@ public class FindSymbolsAlgorithmTest {
 
         Sequence sequence = new Sequence(new String[]{"D", "B", "A", "F"});
         System.out.println("Sequence: " + sequence.toString());
-        Sequence newSequence = algo.replaceOneSymbolByCandidateInSequence(sequence, null).get();
+        Sequence newSequence = algo.changeOneSymbol(sequence, null);
         System.out.println("New sequence: " + newSequence.toString());
         //Assert.assertTrue(newSequence.toString().contains("*"));
         Assert.assertTrue(newSequence.getSymbols().size()==4);
@@ -55,7 +55,7 @@ public class FindSymbolsAlgorithmTest {
         // Ici, on fournit un historique afin de vérifier que la nouvelle sequence n'est pas dedans
         Session<MastermindResult> session = new Session();
         Round round = new Round(new Sequence("D", "C", "A", "F"));
-        session.rounds.add(round);newSequence = algo.replaceOneSymbolByCandidateInSequence(sequence, session).get();
+        session.rounds.add(round);newSequence = algo.changeOneSymbol(sequence, session);
         System.out.println("New sequence using history: " + newSequence.toString());
         Assert.assertTrue(!"D C A F".equals(newSequence.toString()));
 
@@ -80,12 +80,12 @@ public class FindSymbolsAlgorithmTest {
         session.rounds.add(new Round(new Sequence(new String[]{"A","C","H","B"}), new MastermindResult(1,2)));
 
         FindSymbolsAlgorithm algo = new FindSymbolsAlgorithm(candidat);
-        Optional<Sequence> sequence = algo.replaceOneSymbolByCandidateInSequence(new Sequence(new String[]{"A","C","H","B"}), session);
+        Sequence sequence = algo.changeOneSymbol(new Sequence(new String[]{"A","C","H","B"}), session);
 
-        System.out.println(sequence.get().toString());
+        System.out.println(sequence.toString());
 
-//        algo.replaceOneSymbolByCandidateInSequence(new Sequence(new String[]{"A","C","H","B"}), session).toString();
-//        System.out.println(algo.replaceOneSymbolByCandidateInSequence(new Sequence(new String[]{"A","C","H","B"}), session).toString());
+//        algo.changeOneSymbol(new Sequence(new String[]{"A","C","H","B"}), session).toString();
+//        System.out.println(algo.changeOneSymbol(new Sequence(new String[]{"A","C","H","B"}), session).toString());
 
     }
 }
