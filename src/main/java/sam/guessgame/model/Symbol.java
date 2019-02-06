@@ -1,5 +1,8 @@
 package sam.guessgame.model;
 
+/**
+ * Représentation d'un symbol dans une séquence.
+ */
 public class Symbol {
 
     private int column;

@@ -1,43 +1,48 @@
 package sam.guessgame.role;
 
-import org.springframework.stereotype.Component;
-import sam.guessgame.algorithm.FindSymbolsAlgorithm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sam.guessgame.model.*;
+import sam.guessgame.strategy.FindSymbolsStrategy;
 
 
+/**
+ * Représente un joueur de Mastermind joué par l'ordinateur, qui doit découvrir la combinaison de l'adversaire.
+ */
 public class MastermindComputerDecoder extends Initializer implements IDecoder<MastermindResult> {
 
-    private FindSymbolsAlgorithm algo1;
+    private final static Logger LOGGER = LoggerFactory.getLogger(MastermindComputerDecoder.class.getName());
 
-    public MastermindComputerDecoder(Candidat candidat){
+    private FindSymbolsStrategy strategy;
+
+    public MastermindComputerDecoder(Candidat candidat) {
         super(candidat);
     }
 
     @Override
-    public void initSequence(){
-        if (startingSequence==null)
+    public void initSequence() {
+        if (startingSequence == null)
             startingSequence = candidat.generateRandomSequence(true);
-        algo1 = new FindSymbolsAlgorithm(candidat);
+        strategy = new FindSymbolsStrategy(candidat);
     }
 
     @Override
     public Sequence generateAttempt(Session<MastermindResult> session) {
         Sequence attempt = null;
-        if (session.rounds.isEmpty()) {
+        if (session.getRounds().isEmpty()) {
             // first attempt is random
             attempt = startingSequence;
-        }
-        else {
-            Round<MastermindResult> lastRound = session.rounds.get(session.rounds.size()-1);
-            MastermindResult lastResult = (MastermindResult) lastRound.getResult();
+        } else {
+            Round<MastermindResult> lastRound = session.getRounds().get(session.getRounds().size() - 1);
+            MastermindResult lastResult = lastRound.getResult();
 
             if (lastResult.getNbCorrectSymbol() + lastResult.getNbCorrectPosition() == candidat.candidatSequence.size()) {
-                System.out.println("Tous les symbols sont identifiés...");
-                //TODO: réduire le candidat pour éliminer les symbols manifestement incorrects...
+                LOGGER.debug("Tous les symbols sont identifiés...");
+                //Réduction des possibilités en éliminant  les symbols manifestement incorrects...
                 candidat.removeNotInSequence(lastRound.getAttempt());
-                System.out.println("Candidats: " + candidat.toString());
+                LOGGER.debug("Combinaisons possibles : " + candidat.toString());
             }
-            attempt = algo1.visit(session);
+            attempt = strategy.visit(session);
         }
         return attempt;
     }

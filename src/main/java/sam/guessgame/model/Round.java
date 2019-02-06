@@ -1,13 +1,17 @@
 package sam.guessgame.model;
 
+/**
+ * Représentation d'un tour de jeu: contient une combinaison proposée par le joueur dévinant la combinaison
+ * secrète, et un résultat produit par le joueur ayant créé la combinaison secrète.
+ * @param <T> type de résultat utilisé dans la partie
+ */
 public class Round<T extends IResult> {
 
     private Sequence attempt;
 
-    //private MastermindResult result;
     private T result;
 
-    public Round(Sequence sequence){
+    public Round(Sequence sequence) {
         this(sequence, null);
     }
 
@@ -24,9 +28,6 @@ public class Round<T extends IResult> {
         this.attempt = attempt;
     }
 
-    //public MastermindResult getResult() {
-    //    return result;
-    //}
     public T getResult() {
         return result;
     }
@@ -36,11 +37,11 @@ public class Round<T extends IResult> {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         StringBuilder str = new StringBuilder();
         str.append(attempt.toString());
         str.append(" -> ");
-        str.append(result==null?"unknown":result.toString());
+        str.append(result == null ? "unknown" : result.toString());
         return str.toString();
     }
 }

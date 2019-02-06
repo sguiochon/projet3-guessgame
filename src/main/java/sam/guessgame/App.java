@@ -9,6 +9,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
+/**
+ * Classe constituant le point d'entrée de l'application Guess Game
+ */
 @Configuration
 @ComponentScan(basePackages = {"sam.guessgame", "sam.guessgame.role", "sam.guessgame.model"})
 @PropertySource("classpath:config.properties")
@@ -27,22 +30,24 @@ public class App {
 
     private void run() {
 
-        GameMode gameMode = null;
-        GameType gameType = null;
+        do {
+            GameMode gameMode = null;
+            GameType gameType = null;
 
-        System.out.println("Quel type de jeu choisissez-vous?");
-        gameType = GameType.getByInternalValue(InputScanner.inputIntegerFromArray(GameType.getDescription(), GameType.getInternalValues()));
+            System.out.println("Quel type de jeu choisissez-vous?");
+            gameType = GameType.getByInternalValue(InputScanner.inputIntegerFromArray(GameType.getDescription(), GameType.getInternalValues()));
 
-        System.out.println("Quel mode de jeu choisissez-vous?");
-        gameMode = GameMode.getByInternalValue(InputScanner.inputIntegerFromArray(GameMode.getDescriptions(), GameMode.getInternalValues()));
+            System.out.println("Quel mode de jeu choisissez-vous?");
+            gameMode = GameMode.getByInternalValue(InputScanner.inputIntegerFromArray(GameMode.getDescriptions(), GameMode.getInternalValues()));
 
-        LOGGER.debug("Type de jeu: " + gameType, gameType);
-        LOGGER.debug("Mode de jeu: " + gameMode, gameMode);
+            LOGGER.debug("Type de jeu: " + gameType, gameType);
+            LOGGER.debug("Mode de jeu: " + gameMode, gameMode);
 
-        IGameMode game = factory.getGameMode(gameMode, gameType);
+            IGameMode game = factory.getGameMode(gameMode, gameType);
 
-        game.init();
-        game.run();
+            game.init();
+            game.run();
+        } while (!(0 == InputScanner.inputIntegerFromArray("Tapez 0 pour quitter ou 1 pour lancer une autre partie", 0, 1)));
 
     }
 

@@ -4,17 +4,29 @@ import org.springframework.stereotype.Component;
 import sam.guessgame.model.Sequence;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
-
+/**
+ * Classe utilitaire assurant la saisie des données durant l'exécution de l'application.
+ * Les méthodes dont elle dispose sont ainsi appelées par plusieurs classes...
+ */
 public class InputScanner {
 
+    /**
+     * Assure la saisie d'un nombre entier faisant partie d'une liste donnée. L'utilisateur est invité
+     * à recommencer la saisie en cas d'entrée incorrecte, jusqu'à correction.
+     * @param message: message affiché avant la saisie
+     * @param authorizedValues: liste des valeurs admises à la saisie
+     * @return la valeur saisie
+     */
     public static int inputIntegerFromArray(String message, int... authorizedValues) {
         boolean isValidInput = false;
         int intInput = -1;
         do {
-            intInput = scanInt(message);
-            if (intInput != -1) {
+            Optional<Integer> result = scanInt(message);
+            if (result.isPresent()) {
+                intInput = result.get();
                 for (int val : authorizedValues) {
                     if (val == intInput) {
                         isValidInput = true;
@@ -29,12 +41,21 @@ public class InputScanner {
         return intInput;
     }
 
+    /**
+     * Assure la saisie d'un nombre entier compris entre deux valeurs données. L'utilisateur est invité
+     * à recommencer la saisie en cas d'entrée incorrecte, jusqu'à correction.
+     * @param message message affiché avant la saisie
+     * @param min valeur minimale admise
+     * @param max valeur maximale admise
+     * @return la valeur saisie
+     */
     public static int inputIntegerFromMinMax(String message, int min, int max) {
         boolean isValidInput = false;
         int intInput = -1;
         do {
-            intInput = scanInt(message);
-            if (intInput != -1) {
+            Optional<Integer> result = scanInt(message);
+            if (result.isPresent()) {
+                intInput = result.get();
                 if (intInput >= min && intInput <= max)
                     isValidInput = true;
                 else
@@ -45,6 +66,15 @@ public class InputScanner {
         return intInput;
     }
 
+    /**
+     * Assure la saisie d'une combinaison respectant le nombre de symbols donné, la liste de symbols donnée, et le fait que chaque symbol dans
+     * la combinaison doit être unique ou non. L'utilisateur est invité à corriger sa saisie jusqu'à ce qu'elle soit valide, si nécessaire.
+     * @param message message affiché avant la saisie
+     * @param sequenceSize nombre exact de caractères à saisir
+     * @param authorizedValues symbols admis dans la combinaison
+     * @param uniqueSymbolsOnly vrai si la séquence saisie ne doit pas comporter de doublons
+     * @return l'instance de type Sequence contenant la combinaison saisie par l'utilisateur
+     */
     public static Sequence inputSequence(String message, int sequenceSize, List<String> authorizedValues, boolean uniqueSymbolsOnly) {
         Scanner scanner = new Scanner(System.in);
         String listOfSymbols = authorizedValues.stream().reduce("", (a, b) -> a + " " + b);
@@ -82,16 +112,12 @@ public class InputScanner {
         return sequence;
     }
 
-    /*
-    public static void main(String[] args) {
-        InputScanner input = new InputScanner();
-        input.inputIntegerFromMinMax("Saisir un nombre entier entre 0 et 1: ", 0,1);
-        input.inputIntegerFromArray("Saisir un nombre entier entre 1 et 4: ", 1,2,3,4);
-    }
-    */
-
-
-    private static int scanInt(String message) {
+    /**
+     * Traite la saisie afin de la convertir en nombre entier. En cas d'échec, la méthode retourne un Optional vide.
+     * @param message: message affiché sur la console avant saisie
+     * @return
+     */
+    private static Optional<Integer> scanInt(String message) {
         Scanner scanner = new Scanner(System.in);
         int intInput = -1;
 
@@ -100,9 +126,10 @@ public class InputScanner {
         scanner.nextLine();
         try {
             intInput = Integer.parseInt(input);
+            return Optional.of(Integer.valueOf(intInput));
         } catch (NumberFormatException e) {
             System.out.println("La valeur saisie n'est pas un nombre entier...");
+            return Optional.empty();
         }
-        return intInput;
     }
 }

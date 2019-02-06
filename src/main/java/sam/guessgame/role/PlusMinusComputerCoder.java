@@ -4,11 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sam.guessgame.model.*;
 
-public class PlusMinusComputerCoder extends Initializer implements ICoder<PlusMinusResult>{
+/**
+ * Représente un joueur de PlusMoins joué par l'ordinateur dont la combinaison secrète doit être trouvée par l'adversaire.
+ */
+public class PlusMinusComputerCoder extends AbstractComputerCoder implements ICoder<PlusMinusResult>{
 
     private final static Logger LOGGER = LoggerFactory.getLogger(PlusMinusComputerCoder.class.getName());
-
-    public Sequence winningSequence;
 
     public PlusMinusComputerCoder(Candidat candidat){
         super(candidat);
@@ -48,17 +49,4 @@ public class PlusMinusComputerCoder extends Initializer implements ICoder<PlusMi
         return (nbFound==nbSymbols);
     }
 
-    @Override
-    public void initSequence() {
-        //LOGGER.debug("initSequence", this);
-        if (candidat!=null) {
-            winningSequence = candidat.generateRandomSequence(true);
-            LOGGER.debug("Séquence aléatoire");
-        }
-        else {
-            winningSequence = startingSequence;
-            LOGGER.debug("Séquence spécifiée (pas aléatoirement)");
-        }
-        LOGGER.debug("initSequence -> winning sequence: " + winningSequence.toString());
-    }
 }

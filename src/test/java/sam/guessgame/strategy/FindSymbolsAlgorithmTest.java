@@ -1,4 +1,4 @@
-package sam.guessgame.algorithm;
+package sam.guessgame.strategy;
 
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -7,7 +7,6 @@ import sam.guessgame.model.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Optional;
 
 public class FindSymbolsAlgorithmTest {
 /*
@@ -42,7 +41,7 @@ public class FindSymbolsAlgorithmTest {
         candidat.candidatSequence.set(2, new ArrayList<String>(Arrays.asList(new String[]{"A"})));
         candidat.candidatSequence.set(3, new ArrayList<String>(Arrays.asList(new String[]{"B","C","E","F"})));
 
-        FindSymbolsAlgorithm algo = new FindSymbolsAlgorithm(candidat);
+        FindSymbolsStrategy algo = new FindSymbolsStrategy(candidat);
 
         Sequence sequence = new Sequence(new String[]{"D", "B", "A", "F"});
         System.out.println("Sequence: " + sequence.toString());
@@ -55,7 +54,7 @@ public class FindSymbolsAlgorithmTest {
         // Ici, on fournit un historique afin de vérifier que la nouvelle sequence n'est pas dedans
         Session<MastermindResult> session = new Session();
         Round round = new Round(new Sequence("D", "C", "A", "F"));
-        session.rounds.add(round);newSequence = algo.changeOneSymbol(sequence, session);
+        session.getRounds().add(round);newSequence = algo.changeOneSymbol(sequence, session);
         System.out.println("New sequence using history: " + newSequence.toString());
         Assert.assertTrue(!"D C A F".equals(newSequence.toString()));
 
@@ -70,16 +69,16 @@ public class FindSymbolsAlgorithmTest {
         candidat.candidatSequence.set(3, new ArrayList<String>(Arrays.asList(new String[]{"A", "B", "H"})));
 
         Session session  = new Session();
-        session.rounds.add(new Round(new Sequence(new String[]{"D","E","C","B"}), new MastermindResult(1,1)));
-        session.rounds.add(new Round(new Sequence(new String[]{"A","E","C","B"}), new MastermindResult(0,2)));
-        session.rounds.add(new Round(new Sequence(new String[]{"A","F","C","B"}), new MastermindResult(0,2)));
-        session.rounds.add(new Round(new Sequence(new String[]{"A","G","C","B"}), new MastermindResult(0,2)));
-        session.rounds.add(new Round(new Sequence(new String[]{"A","H","C","B"}), new MastermindResult(0,3)));
-        session.rounds.add(new Round(new Sequence(new String[]{"A","H","E","B"}), new MastermindResult(0,2)));
-        session.rounds.add(new Round(new Sequence(new String[]{"A","C","E","B"}), new MastermindResult(1,1)));
-        session.rounds.add(new Round(new Sequence(new String[]{"A","C","H","B"}), new MastermindResult(1,2)));
+        session.getRounds().add(new Round(new Sequence(new String[]{"D","E","C","B"}), new MastermindResult(1,1)));
+        session.getRounds().add(new Round(new Sequence(new String[]{"A","E","C","B"}), new MastermindResult(0,2)));
+        session.getRounds().add(new Round(new Sequence(new String[]{"A","F","C","B"}), new MastermindResult(0,2)));
+        session.getRounds().add(new Round(new Sequence(new String[]{"A","G","C","B"}), new MastermindResult(0,2)));
+        session.getRounds().add(new Round(new Sequence(new String[]{"A","H","C","B"}), new MastermindResult(0,3)));
+        session.getRounds().add(new Round(new Sequence(new String[]{"A","H","E","B"}), new MastermindResult(0,2)));
+        session.getRounds().add(new Round(new Sequence(new String[]{"A","C","E","B"}), new MastermindResult(1,1)));
+        session.getRounds().add(new Round(new Sequence(new String[]{"A","C","H","B"}), new MastermindResult(1,2)));
 
-        FindSymbolsAlgorithm algo = new FindSymbolsAlgorithm(candidat);
+        FindSymbolsStrategy algo = new FindSymbolsStrategy(candidat);
         Sequence sequence = algo.changeOneSymbol(new Sequence(new String[]{"A","C","H","B"}), session);
 
         System.out.println(sequence.toString());

@@ -1,6 +1,9 @@
 package sam.guessgame.model;
 
-public class MastermindResult implements IResult{
+/**
+ * Résultat rendant compte de la pertinance d'une combinaison soumise durant une partie de Mastermind.
+ */
+public class MastermindResult implements IResult {
 
     private int nbCorrectPosition;
     private int nbCorrectSymbol;
@@ -11,7 +14,7 @@ public class MastermindResult implements IResult{
     }
 
     public MastermindResult() {
-        this(0,0);
+        this(0, 0);
     }
 
     @Override
@@ -32,7 +35,7 @@ public class MastermindResult implements IResult{
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "bien placé: " + nbCorrectPosition + ", bon symbol: " + nbCorrectSymbol;
     }
 }

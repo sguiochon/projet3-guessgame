@@ -1,16 +1,21 @@
 package sam.guessgame.model;
 
-import sam.guessgame.algorithm.VisitorAlgorithm;
+import sam.guessgame.strategy.SessionVisitor;
 
 import java.util.*;
 
+/**
+ * Représente l'ensemble des tours d'une partie: chaque tour joué est collecté par la classe
+ * Session.
+ * @param <T> type de résultat de chaque tour.
+ */
 public class Session<T extends IResult> implements Visitable{
 
-    public List<Round<T>> rounds = new ArrayList<Round<T>>();
+    private List<Round<T>> rounds = new ArrayList<Round<T>>();
 
-    //public void addRound(Round round){
-    //    rounds.add(round);
-    //}
+    public List<Round<T>> getRounds() {
+        return rounds;
+    }
 
     @Override
     public String toString(){
@@ -25,7 +30,7 @@ public class Session<T extends IResult> implements Visitable{
     }
 
     @Override
-    public Sequence accept(VisitorAlgorithm visitor) {
+    public Sequence accept(SessionVisitor visitor) {
         return visitor.visit(this);
     }
 }

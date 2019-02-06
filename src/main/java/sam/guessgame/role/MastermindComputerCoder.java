@@ -2,60 +2,38 @@ package sam.guessgame.role;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import sam.guessgame.model.Candidat;
-import sam.guessgame.model.Sequence;
 import sam.guessgame.model.MastermindResult;
+import sam.guessgame.model.Sequence;
 
-
-public class MastermindComputerCoder extends Initializer implements ICoder<MastermindResult> {
+/**
+ * Représente un joueur de Mastermind joué par l'ordinateur dont la combinaison secrète doit être trouvée par l'adversaire.
+ */
+public class MastermindComputerCoder extends AbstractComputerCoder implements ICoder<MastermindResult> {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(MastermindComputerCoder.class.getName());
 
-    public Sequence winningSequence;
-
-
-    public MastermindComputerCoder(Candidat candidat){
+    public MastermindComputerCoder(Candidat candidat) {
         super(candidat);
     }
 
-    /*
-    public MastermindComputerCoder(Sequence winningSequence){
-        super(winningSequence);
-        LOGGER.debug("creation2");
-    }
-    */
-
-    public Sequence getWinningSequence(){
-        return winningSequence;
-    }
-
-    @Override
-    public void initSequence() {
-        if (candidat!=null) {
-            winningSequence = candidat.generateRandomSequence(true);
-            LOGGER.debug("Séquence aléatoire");
-        }
-        else {
-            winningSequence = startingSequence;
-            LOGGER.debug("Séquence spécifiée (pas aléatoirement)");
-        }
-        LOGGER.debug("initSequence -> winning sequence: " + winningSequence.toString());
-    }
-
-
+    /**
+     * Evalue le résultat de la comparaison d'une combinaison avec la combinaison secrète.
+     *
+     * @param attempt la combinaison à comparer
+     * @return résultat de la comparaison.
+     */
     @Override
     public MastermindResult evaluateAttempt(Sequence attempt) {
         MastermindResult result = new MastermindResult();
         int attemptSymbolPosition = 0;
-        for (String attemptSymbol : attempt.getSymbols()){
+        for (String attemptSymbol : attempt.getSymbols()) {
             int winningSymbolPosition = 0;
-            for (String winningSymbol : winningSequence.getSymbols()){
-                if (attemptSymbol.equals(winningSymbol)){
-                    if (attemptSymbolPosition==winningSymbolPosition){
+            for (String winningSymbol : winningSequence.getSymbols()) {
+                if (attemptSymbol.equals(winningSymbol)) {
+                    if (attemptSymbolPosition == winningSymbolPosition) {
                         result.incNbCorrectPosition();
-                    }
-                    else{
+                    } else {
                         result.incNbCorrectSymbol();
                     }
                     break;
@@ -66,5 +44,4 @@ public class MastermindComputerCoder extends Initializer implements ICoder<Maste
         }
         return result;
     }
-
 }

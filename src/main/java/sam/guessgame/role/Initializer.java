@@ -1,26 +1,23 @@
 package sam.guessgame.role;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import sam.guessgame.model.Candidat;
 import sam.guessgame.model.Sequence;
 
 import java.util.Random;
 
+/**
+ * Superclasse assurant l'initialisation des différents types de joueurs.
+ */
 public abstract class Initializer implements ISequenceInitializer {
 
-    private final static Random random = new Random(System.currentTimeMillis());;
+    private final static Random random = new Random(System.currentTimeMillis());
 
-    //@Autowired
     public Candidat candidat;
 
     protected Sequence startingSequence;
 
-    /*
-    public Initializer(Sequence sequence){
-        this.startingSequence = sequence;
-    }
-*/
-    public Initializer(Candidat candidat){
+
+    public Initializer(Candidat candidat) {
         this.candidat = candidat;
     }
 

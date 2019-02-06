@@ -60,7 +60,7 @@ public class SingleGameMode<T extends ICoder, U extends IDecoder, V extends IRes
             isSolutionFound = coder.check(result, sequenceSize);
 
             System.out.println(currentRound.toString());
-            session.rounds.add(currentRound);
+            session.getRounds().add(currentRound);
             nbAttempts++;
         }
         while(nbAttempts<maxNbAttempts && !isSolutionFound);

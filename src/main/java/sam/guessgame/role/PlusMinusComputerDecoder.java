@@ -1,14 +1,17 @@
 package sam.guessgame.role;
 
-import sam.guessgame.algorithm.FindIntegersAlgorithm;
+import sam.guessgame.strategy.FindIntegersStrategy;
 import sam.guessgame.model.Candidat;
 import sam.guessgame.model.PlusMinusResult;
 import sam.guessgame.model.Sequence;
 import sam.guessgame.model.Session;
 
+/**
+ * Représente un joueur de PlusMoins joué par l'ordinateur, qui doit découvrir la combinaison de l'adversaire.
+ */
 public class PlusMinusComputerDecoder extends Initializer implements IDecoder<PlusMinusResult> {
 
-    private FindIntegersAlgorithm algo;
+    private FindIntegersStrategy strategy;
 
     public PlusMinusComputerDecoder(Candidat candidat) {
         super(candidat);
@@ -17,21 +20,19 @@ public class PlusMinusComputerDecoder extends Initializer implements IDecoder<Pl
     @Override
     public Sequence generateAttempt(Session<PlusMinusResult> session) {
         Sequence attempt = null;
-        if (session.rounds.isEmpty()) {
+        if (session.getRounds().isEmpty()) {
             // first attempt is random
-            attempt = startingSequence;
+            return startingSequence;
         }
         else {
-            return algo.visit(session);
+            return strategy.visit(session);
         }
-
-        return new Sequence("5", "5","5","5");
     }
 
     @Override
     public void initSequence() {
         if (startingSequence == null)
             startingSequence = candidat.generateRandomSequence(false);
-        algo = new FindIntegersAlgorithm(candidat);
+        strategy = new FindIntegersStrategy(candidat);
     }
 }

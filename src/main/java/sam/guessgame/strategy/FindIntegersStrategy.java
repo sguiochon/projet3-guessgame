@@ -1,4 +1,4 @@
-package sam.guessgame.algorithm;
+package sam.guessgame.strategy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,21 +7,21 @@ import sam.guessgame.model.*;
 import java.util.Arrays;
 import java.util.Random;
 
-public class FindIntegersAlgorithm  implements VisitorAlgorithm<PlusMinusResult>{
+public class FindIntegersStrategy implements SessionVisitor<PlusMinusResult> {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(FindSymbolsAlgorithm.class.getName());
+    private final static Logger LOGGER = LoggerFactory.getLogger(FindSymbolsStrategy.class.getName());
 
     private final static Random random = new Random(System.currentTimeMillis());
     private final Candidat candidat;
 
-    public FindIntegersAlgorithm(Candidat candidat){
+    public FindIntegersStrategy(Candidat candidat){
         this.candidat = candidat;
     }
 
     @Override
     public Sequence visit(Session<PlusMinusResult> session) {
 
-        Round<PlusMinusResult> lastRound = session.rounds.get(session.rounds.size()-1);
+        Round<PlusMinusResult> lastRound = session.getRounds().get(session.getRounds().size()-1);
         Sequence attempt = lastRound.getAttempt();
         PlusMinusResult result = lastRound.getResult();
 

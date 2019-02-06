@@ -1,21 +1,23 @@
 package sam.guessgame.model;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
- * A sequence is a list of symbols. One symbol can only be used once, multiple occurrences is not
- * allowed...
- * A sequence may represent the sequence to guess or a attempt to guess.
+ * Représentation d'une combinaison conforme aux paramètres d'un jeu (nombre de symbols et valeurs possibles).
+ * Dans une partie, cette classe sera utilisée pour représenter à la fois la combinaison secrète à trouver et également
+ * les différentes combinaisons proposées par le joueur devant la deviner.
  */
 public class Sequence {
 
     private List<String> symbols;
 
-    public Sequence(){
+    public Sequence() {
         symbols = new ArrayList();
     }
 
-    public Sequence(int length){
+    public Sequence(int length) {
         symbols = new ArrayList<String>(Arrays.asList(new String[length]));
     }
 
@@ -23,33 +25,30 @@ public class Sequence {
         symbols = new ArrayList<String>(Arrays.asList(s));
     }
 
-
-
-    public List<String> getSymbols(){
+    public List<String> getSymbols() {
         return symbols;
     }
 
-    public void addSymbol(String symbol){
+    public void addSymbol(String symbol) {
         symbols.add(symbol);
     }
 
-    public Sequence duplicate(){
-        return new Sequence(this.toString().replace(" ","").split(""));
+    public Sequence duplicate() {
+        return new Sequence(this.toString().replace(" ", "").split(""));
     }
 
-    public void setSymbolAt(int position, String symbol){
+    public void setSymbolAt(int position, String symbol) {
         symbols.set(position, symbol);
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         StringBuilder stb = new StringBuilder();
         boolean isFirstSymbol = true;
-        for (String s : symbols){
-            if (!isFirstSymbol){
+        for (String s : symbols) {
+            if (!isFirstSymbol) {
                 stb.append(" ");
-            }
-            else{
+            } else {
                 isFirstSymbol = false;
             }
             stb.append(s);

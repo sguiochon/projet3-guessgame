@@ -2,22 +2,21 @@ package sam.guessgame.role;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import sam.guessgame.InputScanner;
 import sam.guessgame.model.Candidat;
 import sam.guessgame.model.MastermindResult;
 import sam.guessgame.model.Sequence;
 
-
+/**
+ * Représente un joueur de Mastermind joué par un humain dont la combinaison secrète doit être trouvée par l'adversaire.
+ */
 public class MastermindHumanCoder extends Initializer implements ICoder<MastermindResult> {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(MastermindHumanCoder.class.getName());
 
     private Sequence winningSequence;
 
-
-    public MastermindHumanCoder(Candidat candidat){
+    public MastermindHumanCoder(Candidat candidat) {
         super(candidat);
     }
 

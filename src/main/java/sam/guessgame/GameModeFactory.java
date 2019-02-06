@@ -10,6 +10,9 @@ import sam.guessgame.model.MastermindResult;
 import sam.guessgame.model.PlusMinusResult;
 import sam.guessgame.role.*;
 
+/**
+ * Factory de IGameMode
+ */
 @Component
 public class GameModeFactory {
 
@@ -38,15 +41,21 @@ public class GameModeFactory {
         this.maxNbAttempts = maxNbAttempts;
 
         if (mastermindSequenceSize>mastermindPossibleValues.length) {
-            LOGGER.error("Invalid game settings: " + mastermindSequenceSize + ", " + mastermindPossibleValues);
+            LOGGER.error("Paramètres de jeu invalides! Nombre d'emplacements: " + mastermindSequenceSize + ", caractères utilisables " + mastermindPossibleValues);
             throw new InvalidGameSettingsException("Number of possible symbols not allowing unicity of each symbol in the sequence to guess.... Whether add new symbols or reduce the sequence length.");
         }
     }
 
+    /**
+     * Retourne une instance de IGameMode sur la base des mode et type de jeu indiqué.
+     *
+     * @param mode mode de jeu souhaité (ordinateur défend joueur devie, ordinateur devine/joueur a la solution, etc...)
+     * @param type type de jeu souhaité (mastermind, jeu du plus/moins)
+     * @return l'instance de IGameMode prête à lancer une partie
+     */
     public IGameMode getGameMode(GameMode mode, GameType type) {
         switch (type) {
             case MasterMind:
-                //return duelMode;
                 return getMastermindGameMode(mode);
             case PlusMoins:
                 return getPlusMinusGameMode(mode);

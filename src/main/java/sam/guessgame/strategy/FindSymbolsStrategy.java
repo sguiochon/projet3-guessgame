@@ -1,4 +1,4 @@
-package sam.guessgame.algorithm;
+package sam.guessgame.strategy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,12 +7,11 @@ import sam.guessgame.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
-public class FindSymbolsAlgorithm implements VisitorAlgorithm<MastermindResult> {
+public class FindSymbolsStrategy implements SessionVisitor<MastermindResult> {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(FindSymbolsAlgorithm.class.getName());
+    private final static Logger LOGGER = LoggerFactory.getLogger(FindSymbolsStrategy.class.getName());
 
     private final static Random random = new Random(System.currentTimeMillis());
     private final Candidat candidat;
@@ -29,7 +28,7 @@ public class FindSymbolsAlgorithm implements VisitorAlgorithm<MastermindResult> 
     int nbSuccessivePermutations = 0;
 
 
-    public FindSymbolsAlgorithm(Candidat candidat){
+    public FindSymbolsStrategy(Candidat candidat){
         this.candidat = candidat;
     }
 
@@ -38,7 +37,7 @@ public class FindSymbolsAlgorithm implements VisitorAlgorithm<MastermindResult> 
 
         boolean hasFoundAllSymbols = false;
 
-        Round<MastermindResult> lastRound = session.rounds.get(session.rounds.size()-1);
+        Round<MastermindResult> lastRound = session.getRounds().get(session.getRounds().size()-1);
         if (lastRound.getResult().getNbCorrectPosition() + lastRound.getResult().getNbCorrectSymbol()==candidat.candidatSequence.size())
             hasFoundAllSymbols = true;
 
@@ -59,8 +58,8 @@ public class FindSymbolsAlgorithm implements VisitorAlgorithm<MastermindResult> 
 
         if (nbSuccessivePermutations>=2){
             // On compare le résultat des deux derniers essais pour en déduire la pertinence de la permutation:
-            Round<MastermindResult> lastRound = session.rounds.get(session.rounds.size()-1);
-            Round<MastermindResult> previousRound = session.rounds.get(session.rounds.size()-2);
+            Round<MastermindResult> lastRound = session.getRounds().get(session.getRounds().size()-1);
+            Round<MastermindResult> previousRound = session.getRounds().get(session.getRounds().size()-2);
 
             if (lastRound.getResult().getNbCorrectPosition()==0){
                 //TODO: implémenter une stratégie basée sur la recherche d'autres sequences proposées ayant obtenu un résultat nbCorrectPosition >1
@@ -100,7 +99,7 @@ public class FindSymbolsAlgorithm implements VisitorAlgorithm<MastermindResult> 
         if (candidat.isSolution()){
             return candidat.generateRandomSequence(true);
         }
-        Sequence latestAttempt = session.rounds.get(session.rounds.size()-1).getAttempt();
+        Sequence latestAttempt = session.getRounds().get(session.getRounds().size()-1).getAttempt();
         return permuteTwoSymbols(latestAttempt, session);
     }
 
@@ -156,7 +155,7 @@ public class FindSymbolsAlgorithm implements VisitorAlgorithm<MastermindResult> 
             newSequence.setSymbolAt(positionB, symbolB.getSymbol());
 
             // Chercher si cette sequence a deja ete utilisée durant la session.
-            for (Round<MastermindResult> round : session.rounds) {
+            for (Round<MastermindResult> round : session.getRounds()) {
                 if (round.getAttempt().toString().contains(newSequence.toString())) {
                     System.out.println("Cette sequence a deja ete soumise: " + newSequence.toString());
                     isAlreadySubmitted = true;
@@ -182,8 +181,8 @@ public class FindSymbolsAlgorithm implements VisitorAlgorithm<MastermindResult> 
         if (nbSuccessiveChanges >=2){
             // On compare le résultat des deux derniers essais pour en déduire la pertinence du dernier changement de symbol:
 
-            Round<MastermindResult> lastRound = session.rounds.get(session.rounds.size()-1);
-            Round<MastermindResult> previousRound = session.rounds.get(session.rounds.size()-2);
+            Round<MastermindResult> lastRound = session.getRounds().get(session.getRounds().size()-1);
+            Round<MastermindResult> previousRound = session.getRounds().get(session.getRounds().size()-2);
 
             int deltaNbCorrectPosition = lastRound.getResult().getNbCorrectPosition() - previousRound.getResult().getNbCorrectPosition();
             int deltaNbCorrectSymbol = lastRound.getResult().getNbCorrectSymbol() - previousRound.getResult().getNbCorrectSymbol();
@@ -254,7 +253,7 @@ public class FindSymbolsAlgorithm implements VisitorAlgorithm<MastermindResult> 
             return candidat.generateRandomSequence(true);
         }
         // Sinon, on propose maintenant une nouvelle sequence en changeant 1 seul symbol :
-        return changeOneSymbol(session.rounds.get(session.rounds.size()-1).getAttempt(), session);
+        return changeOneSymbol(session.getRounds().get(session.getRounds().size()-1).getAttempt(), session);
     }
 
     public Sequence changeOneSymbol(final Sequence sequence, final Session<MastermindResult> session){
@@ -272,22 +271,22 @@ public class FindSymbolsAlgorithm implements VisitorAlgorithm<MastermindResult> 
         // Si la transformation a forcé un symbol, on s'assure qu'il n'est pas présent aux autres positions. Si c'est le cas, on fait une permutation:
         isPermuted = candidat.hasDuplicatedSymbols(temporarySequence);
 
-        System.out.println("Sequence initiale: "+stringSequence + ". est transformée en " + temporarySequence.toString());
+        LOGGER.debug("Sequence initiale: "+stringSequence + ". est " + (isPermuted?"transformée en ":"préservée en ") + temporarySequence.toString());
 
         for (List<String> symbols : candidat.candidatSequence){
             if (symbols.size()>1){
                 if (!isPermuted) {
-                    System.out.println("- Column " + currentColumn + " are several possible symbols: " + symbols);
+                    LOGGER.debug("En position " + currentColumn + ", les symbols candidats sont: " + symbols);
                     for (String symbol : symbols) {
                         if (isPermuted)
                             break;
 
-                        System.out.println("je tente " + symbol + " en comparant avec " + temporarySequence.toString().replace(" ",""));
+                        LOGGER.debug("Essai du symbol " + symbol + " en comparant avec " + temporarySequence.toString().replace(" ",""));
 
                         //if (!temporarySequence.toString().replace(" ","").substring(0, currentColumn).contains(symbol)) {
                         if (!temporarySequence.toString().contains(symbol) || hasFoundAllSymbols) {
 
-                            System.out.println("Ce symbol n'est pas présent dans " + temporarySequence.toString());
+                            LOGGER.debug("Le symbol " + symbol + " n'est pas présent dans " + temporarySequence.toString());
 
                             oldSymbol = new Symbol(currentColumn, sequence.getSymbols().get(currentColumn));
                             newSymbol = new Symbol(currentColumn, symbol);
@@ -297,44 +296,35 @@ public class FindSymbolsAlgorithm implements VisitorAlgorithm<MastermindResult> 
 
                             if (session != null) { // Si un historique des sequences est fourni à l'appel de la méthode, on s'assure que la nouvelle sequence n'a pas déjà été proposée
                                 boolean isAlreadySubmitted = false;
-                                for (Round<MastermindResult> round : session.rounds) {
+                                for (Round<MastermindResult> round : session.getRounds()) {
                                     if (round.getAttempt().toString().contains(temporarySequence.toString())) {
-                                        System.out.println("Cette sequence a deja ete soumise: " + temporarySequence.toString());
+                                        LOGGER.debug("Cette sequence a deja été proposée: " + temporarySequence.toString());
                                         isAlreadySubmitted = true;
                                     }
                                 }
-
                                 if (!isAlreadySubmitted) {
-                                    System.out.println("Ancien symbol: " + oldSymbol.getSymbol() + " est remplacé par " + newSymbol.getSymbol());
+                                    LOGGER.debug("Ancien symbol: " + oldSymbol.getSymbol() + " est remplacé par " + newSymbol.getSymbol());
                                     isPermuted=true;
-                                    //temporarySequence.getSymbols().set(currentColumn, symbol);
-                                    //return Optional.of(temporarySequence);
                                 } else {
                                     // On restaure l'état de la sequence avant l'essai infructueux
                                     temporarySequence = backup.duplicate();
                                 }
                             } else {
-                                System.out.println("Pas besoin de vérifier la presence dans l'historique des coups...");
+                                LOGGER.debug("Pas besoin de vérifier la presence de la nouvelle séquence dans l'historique des coups précédents...");
                                 isPermuted=true;
-                                //temporarySequence.getSymbols().set(currentColumn, symbol);
-                                //return Optional.of(temporarySequence);
                             }
                         } else {
-                            System.out.println("Le symbol " + symbol + " est déjà dans la sequence, on l'ignore...");
+                            LOGGER.debug("Le symbol proposé (" + symbol + ") est déjà dans la sequence, on l'ignore...");
                         }
                     }
                 }else{
-                    System.out.println("Pas de permutation necessaire pour la colonne " + currentColumn);
-
+                    LOGGER.debug("Pas de changement de symbol nécessaire pour la colonne " + currentColumn);
                 }
             }
             currentColumn++;
         }
-        System.out.println("@@@@@ Permutation réussie? "+ isPermuted);
+        LOGGER.debug("Changement d'un symbol réussi? "+ isPermuted);
         if (!isPermuted){
-            //System.out.println("&&&&&&&&&&&&&&&&&&&&&&&& &&&&&&&&&&&&&&& &&&&&&&&& &&&&& && & Nouvelle sequence aléatoire") ;
-            //temporarySequence = candidat.generateRandomSequence(true, session);
-            //nbSuccessiveChanges = 0;
             throw new AlgorithmException("Impossible de trouver une nouvelle sequence. L'algorithme est déficient, désolé... ou vous avez triché...");
         }
         return temporarySequence;
