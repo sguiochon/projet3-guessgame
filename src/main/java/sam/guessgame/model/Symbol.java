@@ -2,8 +2,8 @@ package sam.guessgame.model;
 
 public class Symbol {
 
-    int column;
-    String symbol;
+    private int column;
+    private String symbol;
 
     public Symbol(int column, String symbol){
         this.column = column;

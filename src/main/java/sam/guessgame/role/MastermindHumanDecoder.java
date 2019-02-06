@@ -11,7 +11,6 @@ import sam.guessgame.model.Session;
 
 public class MastermindHumanDecoder extends Initializer implements IDecoder<MastermindResult> {
 
-    InputScanner inputScanner = new InputScanner();
 
     public MastermindHumanDecoder(Candidat candidat){
         super(candidat);
@@ -19,7 +18,7 @@ public class MastermindHumanDecoder extends Initializer implements IDecoder<Mast
 
     @Override
     public Sequence generateAttempt(Session session) {
-        return inputScanner.inputSequence("Quelle combinaison proposez-vous?",
+        return InputScanner.inputSequence("Quelle combinaison proposez-vous?",
                 candidat.candidatSequence.size(),
                 candidat.candidatSequence.get(0),
                 false);

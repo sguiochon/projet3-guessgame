@@ -17,7 +17,6 @@ public class MastermindComputerCoder extends Initializer implements ICoder<Maste
 
     public MastermindComputerCoder(Candidat candidat){
         super(candidat);
-        LOGGER.debug("creation");
     }
 
     /*
@@ -33,7 +32,6 @@ public class MastermindComputerCoder extends Initializer implements ICoder<Maste
 
     @Override
     public void initSequence() {
-        //LOGGER.debug("initSequence", this);
         if (candidat!=null) {
             winningSequence = candidat.generateRandomSequence(true);
             LOGGER.debug("Séquence aléatoire");

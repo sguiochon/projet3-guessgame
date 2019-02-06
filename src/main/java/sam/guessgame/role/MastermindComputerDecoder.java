@@ -34,6 +34,7 @@ public class MastermindComputerDecoder extends Initializer implements IDecoder<M
             if (lastResult.getNbCorrectSymbol() + lastResult.getNbCorrectPosition() == candidat.candidatSequence.size()) {
                 System.out.println("Tous les symbols sont identifiés...");
                 //TODO: réduire le candidat pour éliminer les symbols manifestement incorrects...
+                candidat.removeNotInSequence(lastRound.getAttempt());
                 System.out.println("Candidats: " + candidat.toString());
             }
             attempt = algo1.visit(session);

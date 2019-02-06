@@ -16,7 +16,6 @@ public class MastermindHumanCoder extends Initializer implements ICoder<Mastermi
 
     private Sequence winningSequence;
 
-    private InputScanner inputScanner = new InputScanner();
 
     public MastermindHumanCoder(Candidat candidat){
         super(candidat);
@@ -25,14 +24,14 @@ public class MastermindHumanCoder extends Initializer implements ICoder<Mastermi
     @Override
     public MastermindResult evaluateAttempt(Sequence attempt) {
         System.out.println("Votre adversaire propose la combinaison " + attempt + " (Solution: " + winningSequence + ")");
-        int nbCorrectPosition = inputScanner.inputIntegerFromMinMax("Nombre de symbols corrects et bien placés?", 0, candidat.candidatSequence.size());
-        int nbCorrectSymbol = inputScanner.inputIntegerFromMinMax("Nombre de symbols corrects mais mal placés?", 0, candidat.candidatSequence.size());
+        int nbCorrectPosition = InputScanner.inputIntegerFromMinMax("Nombre de symbols corrects et bien placés?", 0, candidat.candidatSequence.size());
+        int nbCorrectSymbol = InputScanner.inputIntegerFromMinMax("Nombre de symbols corrects mais mal placés?", 0, candidat.candidatSequence.size());
         return new MastermindResult(nbCorrectPosition, nbCorrectSymbol);
     }
 
     @Override
     public void initSequence() {
-        winningSequence = inputScanner.inputSequence("Combinaison secrète que l'adversaire doit découvrir?",
+        winningSequence = InputScanner.inputSequence("Combinaison secrète que l'adversaire doit découvrir?",
                 candidat.candidatSequence.size(),
                 candidat.candidatSequence.get(0),
                 true);

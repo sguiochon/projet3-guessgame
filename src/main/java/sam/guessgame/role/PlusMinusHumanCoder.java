@@ -9,8 +9,6 @@ public class PlusMinusHumanCoder extends Initializer implements ICoder<PlusMinus
 
     private Sequence winningSequence;
 
-    private InputScanner inputScanner = new InputScanner();
-
     public PlusMinusHumanCoder(Candidat candidat){
         super(candidat);
     }
@@ -18,7 +16,7 @@ public class PlusMinusHumanCoder extends Initializer implements ICoder<PlusMinus
     @Override
     public PlusMinusResult evaluateAttempt(Sequence attempt) {
         PlusMinusResult result = new PlusMinusResult();
-        Sequence sequence = inputScanner.inputSequence("Quelle séquence décrit la tentative de votre adversaire? ",
+        Sequence sequence = InputScanner.inputSequence("Quelle séquence décrit la tentative de votre adversaire? ",
                 candidat.candidatSequence.size(),
                 Arrays.asList(PlusMinusResultValue.getSymbols()),
         false);
@@ -39,7 +37,7 @@ public class PlusMinusHumanCoder extends Initializer implements ICoder<PlusMinus
 
     @Override
     public void initSequence() {
-        winningSequence = inputScanner.inputSequence("Combinaison secrète que l'adversaire doit découvrir?",
+        winningSequence = InputScanner.inputSequence("Combinaison secrète que l'adversaire doit découvrir?",
                 candidat.candidatSequence.size(),
                 candidat.candidatSequence.get(0),
                 false);

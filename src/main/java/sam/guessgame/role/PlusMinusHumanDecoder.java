@@ -5,14 +5,13 @@ import sam.guessgame.model.*;
 
 public class PlusMinusHumanDecoder extends Initializer implements IDecoder<PlusMinusResult>{
 
-    InputScanner inputScanner = new InputScanner();
 
     public PlusMinusHumanDecoder(Candidat candidat){
         super(candidat);
     }
     @Override
     public Sequence generateAttempt(Session<PlusMinusResult> session) {
-        return inputScanner.inputSequence("Quelle combinaison proposez-vous?",
+        return InputScanner.inputSequence("Quelle combinaison proposez-vous?",
                 candidat.candidatSequence.size(),
                 candidat.candidatSequence.get(0),
                 false);
