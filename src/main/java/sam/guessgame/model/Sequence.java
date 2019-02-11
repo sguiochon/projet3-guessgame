@@ -17,6 +17,13 @@ public class Sequence {
         symbols = new ArrayList();
     }
 
+    public Sequence(List<String> symbols){
+        this.symbols = new ArrayList();
+        for (String symbol : symbols){
+            this.symbols.add(symbol);
+        }
+    }
+
     public Sequence(int length) {
         symbols = new ArrayList<String>(Arrays.asList(new String[length]));
     }
@@ -58,5 +65,9 @@ public class Sequence {
 
     public String getSymbolAt(int position) {
         return symbols.get(position);
+    }
+
+    public void removeSymbolAt(int position){
+        symbols.remove(position);
     }
 }

@@ -2,16 +2,18 @@ package sam.guessgame.role;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import sam.guessgame.model.*;
 
 /**
  * Représente un joueur de PlusMoins joué par l'ordinateur dont la combinaison secrète doit être trouvée par l'adversaire.
  */
+@Component
 public class PlusMinusComputerCoder extends AbstractComputerCoder implements ICoder<PlusMinusResult>{
 
     private final static Logger LOGGER = LoggerFactory.getLogger(PlusMinusComputerCoder.class.getName());
 
-    public PlusMinusComputerCoder(Candidat candidat){
+    public PlusMinusComputerCoder(PlusMinusCandidat candidat){
         super(candidat);
     }
 
@@ -48,5 +50,10 @@ public class PlusMinusComputerCoder extends AbstractComputerCoder implements ICo
         }
         return (nbFound==nbSymbols);
     }
+
+    public Sequence getWinningSequence() {
+        return winningSequence;
+    }
+
 
 }

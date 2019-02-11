@@ -3,6 +3,8 @@ package sam.guessgame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
@@ -13,14 +15,15 @@ import org.springframework.context.annotation.PropertySource;
  * Classe constituant le point d'entrée de l'application Guess Game
  */
 @Configuration
-@ComponentScan(basePackages = {"sam.guessgame", "sam.guessgame.role", "sam.guessgame.model"})
+@ComponentScan(basePackages = {"sam.guessgame", "sam.guessgame.role", "sam.guessgame.model", "sam.guessgame.strategy"})
 @PropertySource("classpath:config.properties")
 public class App {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(App.class.getName());
 
     @Autowired
-    GameModeFactory factory;
+    @Qualifier("experimental")
+    IGameFactory factory;
 
     public static void main(String[] args) {
         ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(App.class);
@@ -29,7 +32,6 @@ public class App {
     }
 
     private void run() {
-
         do {
             GameMode gameMode = null;
             GameType gameType = null;
@@ -40,8 +42,8 @@ public class App {
             System.out.println("Quel mode de jeu choisissez-vous?");
             gameMode = GameMode.getByInternalValue(InputScanner.inputIntegerFromArray(GameMode.getDescriptions(), GameMode.getInternalValues()));
 
-            LOGGER.debug("Type de jeu: " + gameType, gameType);
-            LOGGER.debug("Mode de jeu: " + gameMode, gameMode);
+            LOGGER.info("Type de jeu: " + gameType);
+            LOGGER.info("Mode de jeu: " + gameMode);
 
             IGameMode game = factory.getGameMode(gameMode, gameType);
 
@@ -50,5 +52,4 @@ public class App {
         } while (!(0 == InputScanner.inputIntegerFromArray("Tapez 0 pour quitter ou 1 pour lancer une autre partie", 0, 1)));
 
     }
-
 }

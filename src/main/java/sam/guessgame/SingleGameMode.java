@@ -7,27 +7,29 @@ import sam.guessgame.role.ICoder;
 import sam.guessgame.role.IDecoder;
 
 /**
- *  Method init is not implemented by the class as this is where the coder/decoder are defined, which depends on the game mode...
+ *  Partie impliquant 2 joueurs jouant à tour de rôle: un {@link: ICoder} et un {@link IDecoder}. La partie s'arrête si
+ *  le IDecoder trouve la combinaison secrète du ICoder ou si le nombre de coups atteint la limite autorisée.
  */
 public class SingleGameMode<T extends ICoder, U extends IDecoder, V extends IResult> implements IGameMode {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(SingleGameMode.class.getName());
 
-    public final int sequenceSize;
-    public final int maxNbAttempts;
-    //public final String[] possibleValues;
+    private final int sequenceSize;
+    private final int maxNbAttempts;
 
     public T coder;
     public U decoder;
+    private Session<V> session = new Session<V>();
 
-    public Session<V> session = new Session();
+    private boolean devMode;
 
-    public String description;
+    private String description;
 
-    public SingleGameMode(int sequenceSize, int maxNbAttempts, String description){
+    public SingleGameMode(int sequenceSize, int maxNbAttempts, String description, boolean devMode){
         this.sequenceSize = sequenceSize;
         this.maxNbAttempts = maxNbAttempts;
         this.description = description;
+        this.devMode = devMode;
     }
 
     @Override
@@ -36,6 +38,10 @@ public class SingleGameMode<T extends ICoder, U extends IDecoder, V extends IRes
         decoder.initSequence();
     }
 
+    /**
+     * Cette méthode représente le déroulement d'une partie.
+     * @return
+     */
     @Override
     public boolean run() {
 
@@ -44,12 +50,17 @@ public class SingleGameMode<T extends ICoder, U extends IDecoder, V extends IRes
         boolean isSolutionFound = false;
 
         do{
+            LOGGER.info("----- " + getDescription() + " -----");
+            LOGGER.info("Tour #" + (nbAttempts+1));
             System.out.println("----- " + getDescription() + " -----");
+            if (devMode)
+                System.out.println("Combinaison secrète: " + coder.getWinningSequence());
             System.out.println("Tour #" + (nbAttempts+1));
 
             // Decoder makes an attempt:
             attempt = decoder.generateAttempt(session);
 
+            LOGGER.info("Combinaison proposée: " + attempt);
             System.out.println("Combinaison proposée: " + attempt);
 
             // Coder returns a result
@@ -66,11 +77,11 @@ public class SingleGameMode<T extends ICoder, U extends IDecoder, V extends IRes
         while(nbAttempts<maxNbAttempts && !isSolutionFound);
 
         if (isSolutionFound){
-            LOGGER.debug("Combinaison trouvée par le Decoder");
-            System.out.println(">>>>> La combinaison a été trouvée!!! <<<<<");
+            LOGGER.info("Combinaison trouvée par le Decoder en " + nbAttempts + " coups");
+            System.out.println(">>>>> La combinaison a été trouvée en " + nbAttempts + " coup(s) !!! <<<<<");
         }
         else{
-            LOGGER.debug("Combinaison pas trouvée par le Decoder");
+            LOGGER.debug("Combinaison PAS trouvée par le Decoder");
             System.out.println(">>>>> La combinaison n'a pas été trouvée! <<<<<");
         }
         return isSolutionFound;

@@ -1,21 +1,20 @@
 package sam.guessgame.role;
 
+import org.springframework.stereotype.Component;
 import sam.guessgame.InputScanner;
-import sam.guessgame.model.Candidat;
-import sam.guessgame.model.PlusMinusResult;
-import sam.guessgame.model.PlusMinusResultValue;
-import sam.guessgame.model.Sequence;
+import sam.guessgame.model.*;
 
 import java.util.Arrays;
 
 /**
  * Représente un joueur de PlusMoins joué par un humain dont la combinaison secrète doit être trouvée par l'adversaire.
  */
+@Component
 public class PlusMinusHumanCoder extends Initializer implements ICoder<PlusMinusResult> {
 
     private Sequence winningSequence;
 
-    public PlusMinusHumanCoder(Candidat candidat) {
+    public PlusMinusHumanCoder(PlusMinusCandidat candidat) {
         super(candidat);
     }
 
@@ -47,4 +46,9 @@ public class PlusMinusHumanCoder extends Initializer implements ICoder<PlusMinus
                 candidat.candidatSequence.get(0),
                 false);
     }
+
+    public Sequence getWinningSequence() {
+        return winningSequence;
+    }
+
 }

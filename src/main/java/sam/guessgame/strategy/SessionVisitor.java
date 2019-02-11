@@ -1,5 +1,6 @@
 package sam.guessgame.strategy;
 
+import sam.guessgame.model.Candidat;
 import sam.guessgame.model.IResult;
 import sam.guessgame.model.Sequence;
 import sam.guessgame.model.Session;
@@ -10,6 +11,8 @@ import sam.guessgame.model.Session;
  */
 public interface SessionVisitor<T extends IResult> {
 
-    public Sequence visit(Session<T> session);
+    Sequence visit(Session<T> session);
+
+    void init(Candidat candidat);
 
 }

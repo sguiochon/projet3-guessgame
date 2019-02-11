@@ -7,14 +7,20 @@ import sam.guessgame.model.*;
 import java.util.Arrays;
 import java.util.Random;
 
+/**
+ * Stratégie mise en oeuvre par un décodeur joué par l'ordinateur afin de trouver la combinaison secrète
+ * au jeu du pluls/moins
+ */
 public class FindIntegersStrategy implements SessionVisitor<PlusMinusResult> {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(FindSymbolsStrategy.class.getName());
 
     private final static Random random = new Random(System.currentTimeMillis());
-    private final Candidat candidat;
+    private Candidat candidat;
 
-    public FindIntegersStrategy(Candidat candidat){
+
+    @Override
+    public void init(Candidat candidat) {
         this.candidat = candidat;
     }
 
@@ -25,9 +31,6 @@ public class FindIntegersStrategy implements SessionVisitor<PlusMinusResult> {
         Sequence attempt = lastRound.getAttempt();
         PlusMinusResult result = lastRound.getResult();
 
-        System.out.println("!!!!! attempt " + attempt);
-        System.out.println("!!!!! result " + result);
-
         // Elimination de candidats
         int position = 0;
         for (String symbol : attempt.getSymbols()){
@@ -35,24 +38,27 @@ public class FindIntegersStrategy implements SessionVisitor<PlusMinusResult> {
             PlusMinusResultValue resultValue = result.getResultAt(position);
             switch (resultValue) {
                 case Moins:
-                    System.out.println("Moins");
+                    LOGGER.debug("Position " + position + ", le résultat est 'est strictement inférieur'");
                     for (int j=intSymbol; j<=9; j++){
                         candidat.invalidSymbolAt(position, new Symbol(0, String.valueOf(j)));
                     }
                     break;
                 case Plus:
+                    LOGGER.debug("Position " + position + ", le résultat est 'est strictement supérieur'");
                     for (int j=0; j<=intSymbol; j++){
                         candidat.invalidSymbolAt(position, new Symbol(0, String.valueOf(j)));
                     }
                     break;
                 case Egal:
+                    LOGGER.debug("Position " + position + ", le résultat est trouvé");
                     candidat.candidatSequence.set(position, Arrays.asList(symbol));
                     break;
             }
             position++;
         }
-
-        System.out.println("new candidat ----> "+ candidat.toString());
+        LOGGER.debug("Combinaisons possibles: "+ candidat.toString());
         return candidat.generateRandomSequence(false);
     }
+
+
 }

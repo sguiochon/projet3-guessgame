@@ -1,18 +1,18 @@
 package sam.guessgame.role;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import sam.guessgame.InputScanner;
-import sam.guessgame.model.Candidat;
-import sam.guessgame.model.MastermindResult;
-import sam.guessgame.model.Sequence;
-import sam.guessgame.model.Session;
+import sam.guessgame.model.*;
 
 /**
  * Représente un joueur de Mastermind joué par un humain qui doit découvrir la combinaison de l'adversaire.
  */
+@Component
 public class MastermindHumanDecoder extends Initializer implements IDecoder<MastermindResult> {
 
-    public MastermindHumanDecoder(Candidat candidat) {
-        super(candidat);
+    public MastermindHumanDecoder(@Autowired MastermindCandidat mastermindCandidat) {
+        super(mastermindCandidat);
     }
 
     @Override

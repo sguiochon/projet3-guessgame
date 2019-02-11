@@ -3,7 +3,9 @@ package sam.guessgame.role;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import sam.guessgame.SingleGameMode;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import sam.guessgame.*;
 import sam.guessgame.model.*;
 
 public class AutomaticModeTest {
@@ -11,29 +13,25 @@ public class AutomaticModeTest {
     private SingleGameMode<MastermindComputerCoder, MastermindComputerDecoder, MastermindResult> mastermindGame;
     private int maxNbAttempts = 20;
 
+    IGameFactory f;
+
     @Before
     public void init() throws Exception {
-
-        Candidat candidat = new Candidat(4, new String[]{"A", "B", "C", "D", "E", "F", "G", "H"});
-        mastermindGame = new SingleGameMode<MastermindComputerCoder, MastermindComputerDecoder, MastermindResult>(
-                4,
-                20,
-                "--- ordinateur VS ordinateur ---");
-        mastermindGame.coder = new MastermindComputerCoder(candidat);
-        mastermindGame.decoder = new MastermindComputerDecoder(candidat);
+        ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(App.class);
+        f = ctx.getBean(GameFactory2.class);
+        mastermindGame = (SingleGameMode<MastermindComputerCoder, MastermindComputerDecoder, MastermindResult>) f.getGameMode(GameMode.Spectateur, GameType.MasterMind);
         mastermindGame.init();
     }
 
     @Test
     public void executionAléatoireDe10parties(){
         for (int i = 0; i<100; i++) {
-            Candidat candidat = new Candidat(4, new String[]{"A", "B", "C", "D", "E", "F", "G", "H"});
-            mastermindGame = new SingleGameMode<MastermindComputerCoder, MastermindComputerDecoder, MastermindResult>(
-                    4,
-                    20,
-                    "--- ordinateur VS ordinateur ---");
-            mastermindGame.coder = new MastermindComputerCoder(candidat);
-            mastermindGame.decoder = new MastermindComputerDecoder(candidat);
+            mastermindGame = (SingleGameMode<MastermindComputerCoder, MastermindComputerDecoder, MastermindResult>) f.getGameMode(GameMode.Spectateur, GameType.MasterMind);
+
+            //MastermindCandidat candidat = new MastermindCandidat(4, new String[]{"A", "B", "C", "D", "E", "F", "G", "H"});
+            //mastermindGame = new SingleGameMode<MastermindComputerCoder, MastermindComputerDecoder, MastermindResult>(4,20,"--- ordinateur VS ordinateur ---", true);
+            //mastermindGame.coder = new MastermindComputerCoder(candidat);
+            //mastermindGame.decoder = new MastermindComputerDecoder(candidat);
             mastermindGame.init();
             Assert.assertTrue(i + ": solution trouvée en moins de " + maxNbAttempts + " tentatives", mastermindGame.run());
         }
@@ -115,4 +113,10 @@ public class AutomaticModeTest {
         Assert.assertTrue("Solution trouvée en moins de " + maxNbAttempts + " tentatives", mastermindGame.run());
     }
 
+    @Test
+    public void battle() throws Exception{
+        ((MastermindComputerCoder)mastermindGame.coder).winningSequence = new Sequence(new String[]{"A","B","C","D"});
+        //((MastermindComputerDecoder)mastermindGame.decoder).startingSequence = new Sequence(new String[]{"C","D","H","B"});
+        Assert.assertTrue("Solution trouvée en moins de " + maxNbAttempts + " tentatives", mastermindGame.run());
+    }
 }

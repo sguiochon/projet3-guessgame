@@ -35,13 +35,14 @@ public class FindSymbolsAlgorithmTest {
     @Ignore
     public void givenASequence_WhenReplacingOneSymbol_ThenNewSequenceIsValid(){
 
-        Candidat candidat = new Candidat(4, new String[]{""});
+        MastermindCandidat candidat = new MastermindCandidat(4, new String[]{""});
         candidat.candidatSequence.set(0, new ArrayList<String>(Arrays.asList(new String[]{"D"})));
         candidat.candidatSequence.set(1, new ArrayList<String>(Arrays.asList(new String[]{"B", "C", "E", "F"})));
         candidat.candidatSequence.set(2, new ArrayList<String>(Arrays.asList(new String[]{"A"})));
         candidat.candidatSequence.set(3, new ArrayList<String>(Arrays.asList(new String[]{"B","C","E","F"})));
 
-        FindSymbolsStrategy algo = new FindSymbolsStrategy(candidat);
+        FindSymbolsStrategy algo = new FindSymbolsStrategy();
+        algo.init(candidat);
 
         Sequence sequence = new Sequence(new String[]{"D", "B", "A", "F"});
         System.out.println("Sequence: " + sequence.toString());
@@ -62,7 +63,7 @@ public class FindSymbolsAlgorithmTest {
 
     @Test
     public void fix(){
-        Candidat candidat = new Candidat(4, new String[]{});
+        MastermindCandidat candidat = new MastermindCandidat(4, new String[]{});
         candidat.candidatSequence.set(0, new ArrayList<String>(Arrays.asList(new String[]{"D"})));
         candidat.candidatSequence.set(1, new ArrayList<String>(Arrays.asList(new String[]{"C"})));
         candidat.candidatSequence.set(2, new ArrayList<String>(Arrays.asList(new String[]{"A", "B", "H"})));
@@ -78,7 +79,8 @@ public class FindSymbolsAlgorithmTest {
         session.getRounds().add(new Round(new Sequence(new String[]{"A","C","E","B"}), new MastermindResult(1,1)));
         session.getRounds().add(new Round(new Sequence(new String[]{"A","C","H","B"}), new MastermindResult(1,2)));
 
-        FindSymbolsStrategy algo = new FindSymbolsStrategy(candidat);
+        FindSymbolsStrategy algo = new FindSymbolsStrategy();
+        algo.init(candidat);
         Sequence sequence = algo.changeOneSymbol(new Sequence(new String[]{"A","C","H","B"}), session);
 
         System.out.println(sequence.toString());

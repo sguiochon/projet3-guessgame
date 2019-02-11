@@ -2,6 +2,7 @@ package sam.guessgame.strategy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import sam.guessgame.exception.AlgorithmException;
 import sam.guessgame.model.*;
 
@@ -9,12 +10,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Stratégie mise en oeuvre par un décodeur joué par l'ordinateur afin de trouver la combinaison secrète
+ * au jeu du mastermind.
+ * La stratégie consiste en deux étapes réalisées successivement (à moins que la solution ne soit trouvée avant...) :
+ * 1) la première étape {@link #evalResultThenChangeOneSymbol(Session)} consiste à changer 1 symbol à la fois lors de chaque essai et d'analyser la façon dont le résultat evolue. Cela permet de réduire le
+ * nombre de possibilités en éliminant des symbols ou au contraire, en trouvant la position de certains avec certitude;
+ * 2) lorsque tous les symbols sont trouvés (mais certains pas bien placés), la deuxième étape {@link #evalResultThenPermuteTwoSymbols(Session)} consiste à réaliser des permutations de deux symbols à chaque essai. Là
+ * encore, c'est l'analyse de la façon dont les résultats évoluent qui permet de trouver la bonne position des symbols.
+ */
+@Component
 public class FindSymbolsStrategy implements SessionVisitor<MastermindResult> {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(FindSymbolsStrategy.class.getName());
 
     private final static Random random = new Random(System.currentTimeMillis());
-    private final Candidat candidat;
+    private FindSymbolsStrategyCandidat candidat;
 
     // données utilisées lors de la stratégie de changement d'un symbol à la fois:
     private Symbol oldSymbol;
@@ -28,8 +39,9 @@ public class FindSymbolsStrategy implements SessionVisitor<MastermindResult> {
     int nbSuccessivePermutations = 0;
 
 
-    public FindSymbolsStrategy(Candidat candidat){
-        this.candidat = candidat;
+
+    public void init(Candidat candidat){
+        this.candidat = new FindSymbolsStrategyCandidat(candidat);
     }
 
     @Override
@@ -38,8 +50,13 @@ public class FindSymbolsStrategy implements SessionVisitor<MastermindResult> {
         boolean hasFoundAllSymbols = false;
 
         Round<MastermindResult> lastRound = session.getRounds().get(session.getRounds().size()-1);
-        if (lastRound.getResult().getNbCorrectPosition() + lastRound.getResult().getNbCorrectSymbol()==candidat.candidatSequence.size())
+        if (lastRound.getResult().getNbCorrectPosition() + lastRound.getResult().getNbCorrectSymbol()==candidat.candidatSequence.size()) {
+            LOGGER.debug("Tous les symbols sont identifiés...");
+            //Réduction des possibilités en éliminant  les symbols manifestement incorrects...
+            candidat.removeNotInSequence(lastRound.getAttempt());
+            LOGGER.debug("Combinaisons possibles : " + candidat.toString());
             hasFoundAllSymbols = true;
+        }
 
         Sequence attempt = null;
         if (hasFoundAllSymbols){
@@ -67,7 +84,7 @@ public class FindSymbolsStrategy implements SessionVisitor<MastermindResult> {
             }
 
             int deltaNbCorrectPosition = lastRound.getResult().getNbCorrectPosition() - previousRound.getResult().getNbCorrectPosition();
-            System.out.println("deltaBPosition: " + deltaNbCorrectPosition);
+            LOGGER.debug("Variation du nombre de Positions Trouvées: " + deltaNbCorrectPosition);
 
             if (deltaNbCorrectPosition==2){
                 // les deux symbols sont maintenant à la bonne position
@@ -75,23 +92,21 @@ public class FindSymbolsStrategy implements SessionVisitor<MastermindResult> {
                 Symbol symbolBAfterPermu = new Symbol(symbolA.getColumn(), symbolB.getSymbol());
                 candidat.foundSymbol(symbolAAfterPermut);
                 candidat.foundSymbol(symbolBAfterPermu);
-
-                System.out.println("@@@ @@@ @@@ >>>>> Apres permut is OK - Bon emplacement trouvé pour " + symbolAAfterPermut.getSymbol() + " (col: " + symbolAAfterPermut.getColumn()+ ") et " + symbolBAfterPermu.getSymbol() +" col:" + symbolBAfterPermu.getColumn() +")");
+                LOGGER.debug("La place APRES permutation (donc celle du tour précédent) est la bonne -> Bon emplacement trouvé pour " + symbolAAfterPermut.getSymbol() + " (col: " + symbolAAfterPermut.getColumn()+ ") et " + symbolBAfterPermu.getSymbol() +" col:" + symbolBAfterPermu.getColumn() +")");
             }
             else if(deltaNbCorrectPosition==-2){
                 // les deux symbols étaient à la bonne place avant la permutation:
                 candidat.foundSymbol(symbolA);
                 candidat.foundSymbol(symbolB);
-                System.out.println("@@@ @@@ @@@ >>>>> Avant permut is OK - Bon emplacement trouvé pour " + symbolA.getSymbol() + " (col: " + symbolA.getColumn()+ ") et " + symbolB.getSymbol() +" col:" + symbolB.getColumn() +")");
+                LOGGER.debug("La place AVANT permutation (donc celle de l'avant dernier tour) est la bonne -> Bon emplacement trouvé pour " + symbolA.getSymbol() + " (col: " + symbolA.getColumn()+ ") et " + symbolB.getSymbol() +" col:" + symbolB.getColumn() +")");
             }
             else if(deltaNbCorrectPosition==0){
-                System.out.println(">>>>> Les deux symbols sont à la mauvaise place: " + symbolA.getSymbol() + " (col:" + symbolA.getColumn() + "," + symbolB.getColumn() + ") et " + symbolB.getSymbol());
                 // Les deux symbols étaient à la mauvaise place avant et apres la permutation:
                 candidat.invalidSymbolAt(symbolA.getColumn(), symbolA);
                 candidat.invalidSymbolAt(symbolA.getColumn(), symbolB);
                 candidat.invalidSymbolAt(symbolB.getColumn(), symbolA);
                 candidat.invalidSymbolAt(symbolB.getColumn(), symbolB);
-                System.out.println("Nouveau candidat après réductions: " + candidat.toString());
+                LOGGER.debug(">>>>> Les deux symbols permutés sont à la mauvaise place au deux derniers tours: " + symbolA.getSymbol() + " (col:" + symbolA.getColumn() + "," + symbolB.getColumn() + ") et " + symbolB.getSymbol());
             }
 
         }
@@ -126,7 +141,7 @@ public class FindSymbolsStrategy implements SessionVisitor<MastermindResult> {
             candidat.setCorrectSymbolsInSequence(newSequence);
 
             if (!candidat.isCompliantWith(newSequence)){
-                System.out.println("@#@#@#@#@#@##@@##@@#####@@@#######@@# Je remets la sequence dans le droit chemin.....");
+                LOGGER.debug("On génère une nouvelle combinaison car les permutations passées conduisent à proposer des symbols mal placés");
                 nbSuccessivePermutations = 0;
                 return candidat.generateRandomSequence(true, session);
             }
@@ -135,7 +150,7 @@ public class FindSymbolsStrategy implements SessionVisitor<MastermindResult> {
             int nbA=0;
             int nbB=1;
             if (positions.size()>2){
-                System.out.println("je dois choisir aléatoirement entre " + positions.size() + " emplacements à permuter");
+                LOGGER.debug("je dois choisir aléatoirement entre " + positions.size() + " emplacements à permuter");
                 nbA = random.nextInt(positions.size());
                 do{
                     nbB = random.nextInt(positions.size());
@@ -147,7 +162,7 @@ public class FindSymbolsStrategy implements SessionVisitor<MastermindResult> {
             if (positionA==-1 || positionB==-1)
                 throw new AlgorithmException("Impossible de trouver une nouvelle sequence. L'algorithme est déficient, désolé... ou vous avez triché...");
 
-            System.out.println("Permutation des positions " + positionA + " et " + positionB);
+            LOGGER.debug("Permutation des positions " + positionA + " et " + positionB);
             symbolA = new Symbol(positionB, newSequence.getSymbolAt(positionB));
             symbolB = new Symbol(positionA, newSequence.getSymbolAt(positionA));
 
@@ -157,17 +172,14 @@ public class FindSymbolsStrategy implements SessionVisitor<MastermindResult> {
             // Chercher si cette sequence a deja ete utilisée durant la session.
             for (Round<MastermindResult> round : session.getRounds()) {
                 if (round.getAttempt().toString().contains(newSequence.toString())) {
-                    System.out.println("Cette sequence a deja ete soumise: " + newSequence.toString());
+                    LOGGER.debug("Cette sequence a deja ete soumise: " + newSequence.toString());
                     isAlreadySubmitted = true;
                 }
             }
-            System.out.println(candidat.toString() + " >>>>>>>>> " + newSequence.toString());
-
+            LOGGER.debug("Résultat de la transformation: " + candidat.toString() + " >>>>>>>>> " + newSequence.toString());
         }
         while(isAlreadySubmitted);
-
         return newSequence;
-
     }
 
 
@@ -187,7 +199,7 @@ public class FindSymbolsStrategy implements SessionVisitor<MastermindResult> {
             int deltaNbCorrectPosition = lastRound.getResult().getNbCorrectPosition() - previousRound.getResult().getNbCorrectPosition();
             int deltaNbCorrectSymbol = lastRound.getResult().getNbCorrectSymbol() - previousRound.getResult().getNbCorrectSymbol();
 
-            System.out.println("adjustement: " + adjustement + ", deltaBPosition: " + deltaNbCorrectPosition + ", deltaBCouleur: " + deltaNbCorrectSymbol);
+            LOGGER.debug("Analyse des résultats des 2 derniers tours: adjustement: " + adjustement + ", deltaBPosition: " + deltaNbCorrectPosition + ", deltaBCouleur: " + deltaNbCorrectSymbol);
 
             deltaNbCorrectPosition=deltaNbCorrectPosition-adjustement;
             if (deltaNbCorrectPosition==1){
@@ -218,7 +230,7 @@ public class FindSymbolsStrategy implements SessionVisitor<MastermindResult> {
                         candidat.invalidSymbol(newSymbol);
                     }
                     else{
-                        // On ne peut pas être certain...
+                        // On ne peut pas être certain...aucune décision possible...
                     }
                 }
             }
@@ -230,7 +242,7 @@ public class FindSymbolsStrategy implements SessionVisitor<MastermindResult> {
 
                 }
                 else if (deltaNbCorrectSymbol==-1){
-                    System.out.println("Ancien symbol ("+oldSymbol.getSymbol()+") est correct, Nouveau symbol ("+newSymbol.getSymbol()+") est incorrect");
+                    LOGGER.debug("Ancien symbol ("+oldSymbol.getSymbol()+") est correct, Nouveau symbol ("+newSymbol.getSymbol()+") est incorrect");
                     // Ancien Symbol est correct symbol
                     // Nouveau symbol est incorrect
                     if (adjustement==0)
@@ -264,8 +276,8 @@ public class FindSymbolsStrategy implements SessionVisitor<MastermindResult> {
         boolean isPermuted = false;
 
         String stringSequence = sequence.toString();
-        System.out.println(stringSequence);
         Sequence temporarySequence = sequence.duplicate();
+
         adjustement = candidat.setCorrectSymbolsInSequence(temporarySequence);
 
         // Si la transformation a forcé un symbol, on s'assure qu'il n'est pas présent aux autres positions. Si c'est le cas, on fait une permutation:

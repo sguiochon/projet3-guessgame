@@ -35,6 +35,21 @@ public class MastermindResult implements IResult {
     }
 
     @Override
+    public boolean equals(Object o){
+        if (o == this)
+            return true;
+
+        if (!( o instanceof MastermindResult))
+            return false;
+
+        MastermindResult result = (MastermindResult) o;
+        if (this.nbCorrectPosition==result.getNbCorrectPosition() && this.nbCorrectSymbol==result.getNbCorrectSymbol())
+            return true;
+        else
+            return false;
+    }
+
+    @Override
     public String toString() {
         return "bien placé: " + nbCorrectPosition + ", bon symbol: " + nbCorrectSymbol;
     }

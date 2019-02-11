@@ -1,5 +1,7 @@
 package sam.guessgame.role;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import sam.guessgame.model.Candidat;
 import sam.guessgame.model.Sequence;
 
@@ -16,8 +18,7 @@ public abstract class Initializer implements ISequenceInitializer {
 
     protected Sequence startingSequence;
 
-
-    public Initializer(Candidat candidat) {
+    protected Initializer(Candidat candidat) {
         this.candidat = candidat;
     }
 

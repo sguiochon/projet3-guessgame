@@ -14,31 +14,36 @@ import sam.guessgame.role.*;
  * Factory de IGameMode
  */
 @Component
-public class GameModeFactory {
+public class GameFactory implements IGameFactory{
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GameModeFactory.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(GameFactory.class.getName());
 
     public final int mastermindSequenceSize;
     public final int plusminusSequenceSize;
     public final int maxNbAttempts;
     public final String[] mastermindPossibleValues;
     public final String[] plusminusPossibleValues;
+    private boolean devMode = false;
 
 
-    Candidat mastermindCandidat;
+    Candidat mastermindCandidat1;
+    Candidat mastermindCandidat2;
 
-    Candidat plusminusCandidat;
+    Candidat plusminusCandidat1;
+    Candidat plusminusCandidat2;
 
-    public GameModeFactory(@Value("${mastermind.sequence.size}") int mastermindSequenceSize,
-                           @Value("${mastermind.list.of.symbols}")String[] mastermindPossibleValues,
-                           @Value("${plusminus.sequence.size}") int plusminusSequenceSize,
-                           @Value("${plusminus.list.of.symbols}")String[] plusminusPossibleValues,
-                           @Value("${maximum.number.of.attempts}")int maxNbAttempts){
+    public GameFactory(@Value("${mastermind.sequence.size}") int mastermindSequenceSize,
+                       @Value("${mastermind.list.of.symbols}")String[] mastermindPossibleValues,
+                       @Value("${plusminus.sequence.size}") int plusminusSequenceSize,
+                       @Value("${plusminus.list.of.symbols}")String[] plusminusPossibleValues,
+                       @Value("${maximum.number.of.attempts}")int maxNbAttempts,
+                       @Value("${devMode:false}") boolean devMode){
         this.mastermindSequenceSize = mastermindSequenceSize;
         this.mastermindPossibleValues = mastermindPossibleValues;
         this.plusminusSequenceSize = plusminusSequenceSize;
         this.plusminusPossibleValues = plusminusPossibleValues;
         this.maxNbAttempts = maxNbAttempts;
+        this.devMode = devMode;
 
         if (mastermindSequenceSize>mastermindPossibleValues.length) {
             LOGGER.error("Paramètres de jeu invalides! Nombre d'emplacements: " + mastermindSequenceSize + ", caractères utilisables " + mastermindPossibleValues);
@@ -56,96 +61,107 @@ public class GameModeFactory {
     public IGameMode getGameMode(GameMode mode, GameType type) {
         switch (type) {
             case MasterMind:
-                return getMastermindGameMode(mode);
+                return getMastermindGameMode(mode, devMode);
             case PlusMoins:
-                return getPlusMinusGameMode(mode);
+                return getPlusMinusGameMode(mode, devMode);
         }
         return null;
     }
 
-    private IGameMode getMastermindGameMode(GameMode mode){
-        mastermindCandidat = new Candidat(this.mastermindSequenceSize, this.mastermindPossibleValues);
+    private IGameMode getMastermindGameMode(GameMode mode, boolean devMode){
+        /*
+        mastermindCandidat1 = new Candidat(this.mastermindSequenceSize, this.mastermindPossibleValues);
+        mastermindCandidat2 = new Candidat(this.mastermindSequenceSize, this.mastermindPossibleValues);
         switch (mode) {
             case Duel:
                 //return duelMode;
-                SingleGameMode<MastermindComputerCoder, MastermindComputerDecoder, MastermindResult> testMode = new SingleGameMode<MastermindComputerCoder, MastermindComputerDecoder, MastermindResult>(
+                DualGameMode<MastermindComputerCoder, MastermindHumanDecoder, MastermindHumanCoder, MastermindComputerDecoder, MastermindResult> dualMode = new DualGameMode<MastermindComputerCoder, MastermindHumanDecoder, MastermindHumanCoder, MastermindComputerDecoder, MastermindResult>(
                         mastermindSequenceSize,
                         maxNbAttempts,
-                        "--- ordinateur VS ordinateur ---");
-                testMode.coder = new MastermindComputerCoder(mastermindCandidat);
-                testMode.decoder = new MastermindComputerDecoder(mastermindCandidat);
-                return testMode;
+                        "--- ordinateur VS ordinateur ---", devMode);
+                dualMode.coder1 = new MastermindComputerCoder(mastermindCandidat1);
+                dualMode.decoder1 = new MastermindHumanDecoder(mastermindCandidat1);
+
+                dualMode.coder2 = new MastermindHumanCoder(mastermindCandidat2);
+                dualMode.decoder2 = new MastermindComputerDecoder(mastermindCandidat2);
+                return dualMode;
             case Challenger:
                 SingleGameMode<MastermindComputerCoder, MastermindHumanDecoder, MastermindResult> challengerMode = new SingleGameMode<MastermindComputerCoder, MastermindHumanDecoder, MastermindResult>(
                         mastermindSequenceSize,
                         maxNbAttempts,
-                        "--- ordinateur VS ordinateur ---");
-                challengerMode.coder = new MastermindComputerCoder(mastermindCandidat);
-                challengerMode.decoder = new MastermindHumanDecoder(mastermindCandidat);
+                        "--- ordinateur VS ordinateur ---", devMode);
+                challengerMode.coder = new MastermindComputerCoder(mastermindCandidat1);
+                challengerMode.decoder = new MastermindHumanDecoder(mastermindCandidat1);
                 return challengerMode;
             case Defenseur:
                 SingleGameMode<MastermindHumanCoder, MastermindComputerDecoder, MastermindResult> defenseurMode = new SingleGameMode<MastermindHumanCoder, MastermindComputerDecoder, MastermindResult>(
                         mastermindSequenceSize,
                         maxNbAttempts,
-                        "L'ordinateur doit trouver VOTRE combinaison");
-                defenseurMode.coder = new MastermindHumanCoder(mastermindCandidat);
-                defenseurMode.decoder = new MastermindComputerDecoder(mastermindCandidat);
+                        "L'ordinateur doit trouver VOTRE combinaison", devMode);
+                defenseurMode.coder = new MastermindHumanCoder(mastermindCandidat1);
+                defenseurMode.decoder = new MastermindComputerDecoder(mastermindCandidat1);
                 return defenseurMode;
             case Spectateur:
                 SingleGameMode<MastermindComputerCoder, MastermindComputerDecoder, MastermindResult> autoMode = new SingleGameMode<MastermindComputerCoder, MastermindComputerDecoder, MastermindResult>(
                         mastermindSequenceSize,
                         maxNbAttempts,
-                        "--- ordinateur VS ordinateur ---");
-                autoMode.coder = new MastermindComputerCoder(mastermindCandidat);
-                autoMode.decoder = new MastermindComputerDecoder(mastermindCandidat);
+                        "--- ordinateur VS ordinateur ---", devMode);
+                autoMode.coder = new MastermindComputerCoder(mastermindCandidat1);
+                autoMode.decoder = new MastermindComputerDecoder(mastermindCandidat1);
                 return autoMode;
         }
+        */
         return null;
     }
 
-    private IGameMode getPlusMinusGameMode(GameMode mode){
-        plusminusCandidat = new Candidat(this.plusminusSequenceSize, this.plusminusPossibleValues);
+    private IGameMode getPlusMinusGameMode(GameMode mode, boolean devMode){
+        /*
+        plusminusCandidat1 = new Candidat(this.plusminusSequenceSize, this.plusminusPossibleValues);
+        plusminusCandidat2 = new Candidat(this.plusminusSequenceSize, this.plusminusPossibleValues);
         switch (mode) {
             case Duel:
                 //return duelMode;
-                SingleGameMode<PlusMinusComputerCoder, PlusMinusHumanDecoder, PlusMinusResult> testMode =
-                        new SingleGameMode<PlusMinusComputerCoder, PlusMinusHumanDecoder, PlusMinusResult>(
+                DualGameMode<PlusMinusComputerCoder, PlusMinusHumanDecoder, PlusMinusHumanCoder, PlusMinusComputerDecoder,PlusMinusResult> dualMode =
+                        new DualGameMode<PlusMinusComputerCoder, PlusMinusHumanDecoder, PlusMinusHumanCoder, PlusMinusComputerDecoder, PlusMinusResult>(
                         plusminusSequenceSize,
                         maxNbAttempts,
-                        "--- ordinateur VS ordinateur ---");
-                testMode.coder = new PlusMinusComputerCoder(plusminusCandidat);
-                testMode.decoder = new PlusMinusHumanDecoder(plusminusCandidat);
-                return testMode;
+                        "--- ordinateur VS ordinateur ---", devMode);
+                dualMode.coder1 = new PlusMinusComputerCoder(plusminusCandidat1);
+                dualMode.decoder1 = new PlusMinusHumanDecoder(plusminusCandidat1);
+                dualMode.coder2 = new PlusMinusHumanCoder(plusminusCandidat1);
+                dualMode.decoder2 = new PlusMinusComputerDecoder(plusminusCandidat1);
+                return dualMode;
 
             case Challenger:
                 SingleGameMode<PlusMinusComputerCoder, PlusMinusHumanDecoder, PlusMinusResult> challengerMode =
                         new SingleGameMode<PlusMinusComputerCoder, PlusMinusHumanDecoder, PlusMinusResult>(
                             plusminusSequenceSize,
                             maxNbAttempts,
-                        "--- VOUS devez trouver la combinaison de l'ordinateur ---");
-                challengerMode.coder = new PlusMinusComputerCoder(plusminusCandidat);
-                challengerMode.decoder = new PlusMinusHumanDecoder(plusminusCandidat);
+                        "--- VOUS devez trouver la combinaison de l'ordinateur ---", devMode);
+                challengerMode.coder = new PlusMinusComputerCoder(plusminusCandidat1);
+                challengerMode.decoder = new PlusMinusHumanDecoder(plusminusCandidat1);
                 return challengerMode;
             case Defenseur:
                 SingleGameMode<PlusMinusHumanCoder, PlusMinusComputerDecoder, PlusMinusResult> defenseurMode =
                         new SingleGameMode<PlusMinusHumanCoder, PlusMinusComputerDecoder, PlusMinusResult>(
                                 plusminusSequenceSize,
                                 maxNbAttempts,
-                        "L'ordinateur doit trouver VOTRE combinaison");
-                defenseurMode.coder = new PlusMinusHumanCoder(plusminusCandidat);
-                defenseurMode.decoder = new PlusMinusComputerDecoder(plusminusCandidat);
+                        "L'ordinateur doit trouver VOTRE combinaison", devMode);
+                defenseurMode.coder = new PlusMinusHumanCoder(plusminusCandidat1);
+                defenseurMode.decoder = new PlusMinusComputerDecoder(plusminusCandidat1);
                 return defenseurMode;
             case Spectateur:
                 SingleGameMode<PlusMinusComputerCoder, PlusMinusComputerDecoder, PlusMinusResult> autoMode =
                         new SingleGameMode<PlusMinusComputerCoder, PlusMinusComputerDecoder, PlusMinusResult>(
                         plusminusSequenceSize,
                         maxNbAttempts,
-                        "--- ordinateur VS ordinateur ---");
-                autoMode.coder = new PlusMinusComputerCoder(plusminusCandidat);
-                autoMode.decoder = new PlusMinusComputerDecoder(plusminusCandidat);
+                        "--- ordinateur VS ordinateur ---", devMode);
+                autoMode.coder = new PlusMinusComputerCoder(plusminusCandidat1);
+                autoMode.decoder = new PlusMinusComputerDecoder(plusminusCandidat1);
                 return autoMode;
 
         }
+        */
         return null;
     }
 

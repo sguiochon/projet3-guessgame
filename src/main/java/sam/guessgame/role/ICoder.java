@@ -16,4 +16,6 @@ public interface ICoder<T extends IResult> extends ISequenceInitializer {
     default boolean check(T result, int nbSymbols) {
         return result.getNbCorrectPosition() == nbSymbols;
     }
+
+    Sequence getWinningSequence();
 }

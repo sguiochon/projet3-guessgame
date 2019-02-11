@@ -1,17 +1,16 @@
 package sam.guessgame.role;
 
+import org.springframework.stereotype.Component;
 import sam.guessgame.InputScanner;
-import sam.guessgame.model.Candidat;
-import sam.guessgame.model.PlusMinusResult;
-import sam.guessgame.model.Sequence;
-import sam.guessgame.model.Session;
+import sam.guessgame.model.*;
 
 /**
  * Représente un joueur de PlusMoins joué par un humain qui doit découvrir la combinaison de l'adversaire.
  */
+@Component
 public class PlusMinusHumanDecoder extends Initializer implements IDecoder<PlusMinusResult> {
 
-    public PlusMinusHumanDecoder(Candidat candidat) {
+    public PlusMinusHumanDecoder(PlusMinusCandidat candidat) {
         super(candidat);
     }
 
