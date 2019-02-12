@@ -48,15 +48,18 @@ Par exemple, on activera le mode _développeur_ en utilisant la commande:
 
 ### Mode d'emploi du jeu
 
-Au démarrage, l'utilisateur doit choisir le type de jeu. Deux options lui sont proposées: jeu du Plus/Moins et MAstermind. Une fois choisi le jeu, l'utilisateur doit choisir parmi 4 modes de jeu:
+Au démarrage, l'utilisateur doit choisir le type de jeu. Deux options lui sont proposées: jeu du Plus/Moins et Mastermind. Une fois choisi le jeu, l'utilisateur doit choisir parmi 4 modes de jeu:
 1. Vous devez trouver la combinaison secrète de l'ordinateur
 2. L'ordinateur doit trouver votre combinaison secrète
 3. L'ordinateur joue contre lui-même (pour les contemplatifs... ou pour tester le comportement de l'ordinateur)
-4. Deux jeux sont lancés simultanément, l'un dans lequel le joueur tente de trouver la combinaison de l'ordinateur, l'autre dans lequel les rôles sont inversés. Ce mode permet de mettre en compétition la stratégie de recherche du joueur et celle de l'ordinateur.
+4. Deux jeux sont lancés simultanément, l'un dans lequel le joueur tente de trouver la combinaison de l'ordinateur,
+ l'autre dans lequel les rôles sont inversés. Ce mode permet de mettre en compétition la stratégie de recherche du joueur et celle de l'ordinateur.
 
 #### Règles du jeu du Plus/Moins
 Dans ce jeu, le joueur appelé _codeur_ choisit une combinaison secrète constituée d'une sequence de chiffres.
-L'autre joueur, le _décodeur_, doit la deviner en soumettant une combinaison à laquelle le codeur répond en indiquant, pour chaque chiffre, si le chiffre à la même position dans la combinaison secrète est _supérieur_, _inférieur_ ou _égal_.
+L'autre joueur, le _décodeur_, doit la deviner en soumettant une combinaison à laquelle le codeur répond 
+en indiquant, pour chaque chiffre, si le chiffre à la même position dans la combinaison secrète est _supérieur_, _inférieur_ 
+ou _égal_ à la proposition faite.
 Le décodeur doit trouver la bonne combinaison avant le nombre limite d'essais.
 
 ### Règles du Mastermind
@@ -68,7 +71,9 @@ Le jeu est paramétrable via deux fichiers:
 1. `config.properties` qui permet de modifier les caractéristiques des jeux (nombre d'essai, taille de la séquence, symbols possibles).
 2. `log4j.xml` qui permet de modifier le niveau de trace et le collecteur des messages (la console ou un fichier).
 
-Selon le mode de lancement du jeu choisi (lancement du jar ou utilisation de Maven), on choisira soit de modifier ces fichiers depuis le répertoire `src/main/ressources`, soit à la racine du jar `target/hello-1.0-SNAPSHOT-jar-with-dependencies.jar`.
+Selon le mode de lancement du jeu choisi (lancement du jar ou utilisation de Maven), on choisira 
+soit de modifier ces fichiers depuis le répertoire `src/main/ressources`, soit de modifier ceux présents 
+à la racine du jar `target/hello-1.0-SNAPSHOT-jar-with-dependencies.jar`.
 
 
 ## Documentation
