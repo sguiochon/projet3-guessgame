@@ -18,7 +18,7 @@ public class AutomaticModeTest {
     @Before
     public void init() throws Exception {
         ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(App.class);
-        f = ctx.getBean(GameFactory2.class);
+        f = ctx.getBean(GameFactory.class);
         mastermindGame = (SingleGameMode<MastermindComputerCoder, MastermindComputerDecoder, MastermindResult>) f.getGameMode(GameMode.Spectateur, GameType.MasterMind);
         mastermindGame.init();
     }

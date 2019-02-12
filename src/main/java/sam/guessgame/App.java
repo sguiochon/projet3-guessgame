@@ -22,7 +22,6 @@ public class App {
     private static final Logger LOGGER = LoggerFactory.getLogger(App.class.getName());
 
     @Autowired
-    @Qualifier("experimental")
     IGameFactory factory;
 
     public static void main(String[] args) {
