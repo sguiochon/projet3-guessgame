@@ -1,6 +1,12 @@
 .idea/
-target/
-!target/site/apidocs/
+target/classes/
+target/archive-tmp/
+target/generated*/
+target/maven*/
+target/surefire-reports/
+target/test-classes/
+target/javadoc-bundle-options/
+target/*.jar
 !target/hello-1.0-SNAPSHOT-jar-with-dependencies.jar
 logs/
 .gitignore

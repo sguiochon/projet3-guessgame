@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"sam.guessgame"},{"l":"sam.guessgame.exception"},{"l":"sam.guessgame.model"},{"l":"sam.guessgame.role"},{"l":"sam.guessgame.strategy"}]
