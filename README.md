@@ -64,6 +64,11 @@ Dans ce jeu, le codeur génère une séquence constituée de lettres (sans doubl
 
 ### Paramètres du jeu
 
+Le jeu est paramétrable via deux fichiers:
+1. `config.properties` qui permet de modifier les caractéristiques des jeux (nombre d'essai, taille de la séquence, symbols possibles).
+2. `log4j.xml` qui permet de modifier le niveau de trace et le collecteur des messages (la console ou un fichier).
+
+Selon le mode de lancement du jeu choisi (lancement du jar ou utilisation de Maven), on choisira soit de modifier ces fichiers depuis le répertoire `src/main/ressources`, soit à la racine du jar `target/hello-1.0-SNAPSHOT-jar-with-dependencies.jar`.
 
 
 ## Documentation
