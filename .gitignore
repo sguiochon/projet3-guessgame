@@ -1,4 +1,6 @@
 .idea/
 target/
+!target/site/apidocs/
+!target/hello-1.0-SNAPSHOT-jar-with-dependencies.jar
 logs/
 .gitignore
