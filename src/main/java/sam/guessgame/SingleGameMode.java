@@ -7,7 +7,7 @@ import sam.guessgame.role.ICoder;
 import sam.guessgame.role.IDecoder;
 
 /**
- *  Partie impliquant 2 joueurs jouant à tour de rôle: un {@link: ICoder} et un {@link IDecoder}. La partie s'arrête si
+ *  Partie impliquant 2 joueurs jouant à tour de rôle: un {@link ICoder} et un {@link IDecoder}. La partie s'arrête si
  *  le IDecoder trouve la combinaison secrète du ICoder ou si le nombre de coups atteint la limite autorisée.
  */
 public class SingleGameMode<T extends ICoder, U extends IDecoder, V extends IResult> implements IGameMode {
@@ -40,7 +40,7 @@ public class SingleGameMode<T extends ICoder, U extends IDecoder, V extends IRes
 
     /**
      * Cette méthode représente le déroulement d'une partie.
-     * @return
+     * @return true si la solution a été trouvée par le décodeur
      */
     @Override
     public boolean run() {
@@ -50,9 +50,9 @@ public class SingleGameMode<T extends ICoder, U extends IDecoder, V extends IRes
         boolean isSolutionFound = false;
 
         do{
-            LOGGER.info("----- " + getDescription() + " -----");
+            LOGGER.info("----- " + description + " -----");
             LOGGER.info("Tour #" + (nbAttempts+1));
-            System.out.println("----- " + getDescription() + " -----");
+            System.out.println("----- " + description + " -----");
             if (devMode)
                 System.out.println("Combinaison secrète: " + coder.getWinningSequence());
             System.out.println("Tour #" + (nbAttempts+1));
@@ -70,7 +70,7 @@ public class SingleGameMode<T extends ICoder, U extends IDecoder, V extends IRes
 
             isSolutionFound = coder.check(result, sequenceSize);
 
-            System.out.println(currentRound.toString());
+            System.out.println("Résultat: " + result.toString());//currentRound.toString());
             session.getRounds().add(currentRound);
             nbAttempts++;
         }
@@ -78,18 +78,13 @@ public class SingleGameMode<T extends ICoder, U extends IDecoder, V extends IRes
 
         if (isSolutionFound){
             LOGGER.info("Combinaison trouvée par le Decoder en " + nbAttempts + " coups");
-            System.out.println(">>>>> La combinaison a été trouvée en " + nbAttempts + " coup(s) !!! <<<<<");
+            System.out.println("\n>>>>> La combinaison a été trouvée en " + nbAttempts + " coup(s) !!! <<<<<");
         }
         else{
             LOGGER.debug("Combinaison PAS trouvée par le Decoder");
-            System.out.println(">>>>> La combinaison n'a pas été trouvée! <<<<<");
+            System.out.println("\n>>>>> La combinaison n'a pas été trouvée! <<<<<");
         }
         return isSolutionFound;
-    }
-
-
-    public String getDescription(){
-        return this.description;
     }
 
 }

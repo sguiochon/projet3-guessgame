@@ -30,18 +30,21 @@ public class FindSymbolsStrategy implements SessionVisitor<MastermindResult> {
     // données utilisées lors de la stratégie de changement d'un symbol à la fois:
     private Symbol oldSymbol;
     private Symbol newSymbol;
-    int nbSuccessiveChanges = 0;
-    private int adjustement = 0;
+    int nbSuccessiveChanges;
+    private int adjustement;
 
     // données utilisées lors de la stratégie de permutation de deux symbols entre deux essais:
     private Symbol symbolA;
     private Symbol symbolB;
-    int nbSuccessivePermutations = 0;
+    int nbSuccessivePermutations;
 
 
 
     public void init(Candidat candidat){
         this.candidat = new FindSymbolsStrategyCandidat(candidat);
+        nbSuccessivePermutations = 0;
+        nbSuccessiveChanges = 0;
+        adjustement = 0;
     }
 
     @Override

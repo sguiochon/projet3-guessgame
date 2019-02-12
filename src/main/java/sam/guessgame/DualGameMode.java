@@ -56,32 +56,59 @@ public class DualGameMode<T extends ICoder, U extends IDecoder, TT extends ICode
         boolean isSolutionFound2 = false;
 
         do{
-            LOGGER.info("----- " + getDescription() + " -----");
-            LOGGER.info("Tour #" + (nbAttempts+1));
-            System.out.println("----- " + getDescription() + " -----");
+            LOGGER.info("----- " + description + " ----- Tour #" + (nbAttempts+1));
+            System.out.println("\n" + description + " Tour #" + (nbAttempts+1));
+
+            System.out.println("Partie I: VOUS devez trouver la combinaison secrète de l'ordinateur ---");
+
             if (devMode)
-                System.out.println("Combinaison secrète: " + coder.getWinningSequence());
-            System.out.println("Tour #" + (nbAttempts+1));
+                System.out.println("Partie I: combinaison secrète: " + coder1.getWinningSequence());
 
-            // Decoder makes an attempt:
-            attempt = decoder.generateAttempt(session);
+            attempt1 = decoder1.generateAttempt(session1);
 
-            LOGGER.info("Combinaison proposée: " + attempt);
-            System.out.println("Combinaison proposée: " + attempt);
+            LOGGER.info("Partie I: combinaison proposée: " + attempt1);
+            System.out.println("Partie I: Combinaison proposée: " + attempt1);
 
-            // Coder returns a result
-            IResult result = coder.evaluateAttempt(attempt);
-            //System.out.println("Coder, réponse: " + result.toString());
-            Round currentRound = new Round(attempt, result);
+            IResult result1 = coder1.evaluateAttempt(attempt1);
+            Round currentRound1 = new Round(attempt1, result1);
+            isSolutionFound1 = coder1.check(result1, sequenceSize);
 
-            isSolutionFound = coder.check(result, sequenceSize);
+            System.out.println("Partie I: résultat: " + result1.toString());
+            session1.getRounds().add(currentRound1);
 
-            System.out.println(currentRound.toString());
-            session.getRounds().add(currentRound);
+            System.out.println("\nPartie II: l'ordinateur doit trouver VOTRE combinaison secrète ---");
+            if (devMode)
+                System.out.println("Partie II: combinaison secrète: " + coder2.getWinningSequence());
+
+            attempt2 = decoder2.generateAttempt(session2);
+
+            LOGGER.info("Partie II: combinaison proposée: " + attempt2);
+            System.out.println("Partie II: Combinaison proposée: " + attempt2);
+
+            IResult result2 = coder2.evaluateAttempt(attempt2);
+            Round currentRound2 = new Round(attempt2, result2);
+            isSolutionFound2 = coder2.check(result2, sequenceSize);
+
+            System.out.println("Partie II: résultat: " + result2.toString());
+            session2.getRounds().add(currentRound2);
+
             nbAttempts++;
         }
-        while(nbAttempts<maxNbAttempts && !isSolutionFound);
+        while(nbAttempts<maxNbAttempts && !isSolutionFound1 && !isSolutionFound2);
 
-        return true;
+        if (isSolutionFound1){
+            LOGGER.info("Partie I: Combinaison trouvée par le joueur en " + nbAttempts + " coups");
+            System.out.println("\n>>>>> BRAVO! VOUS avez trouvé la combinaison en " + nbAttempts + " coup(s) !!! <<<<<");
+        }
+        else if (isSolutionFound2){
+            LOGGER.info("Partie II: Combinaison trouvée par l'ordinateur en " + nbAttempts + " coups");
+            System.out.println("\n>>>>> L'ordinateur a trouvé votre combinaison en " + nbAttempts + " coup(s) !!! <<<<<");
+        }
+        else{
+            LOGGER.debug("Combinaison PAS trouvée par le Decoder");
+            System.out.println("\n>>>>> Ni vous ni l'ordinateur n'avez trouvé la combinaison ! <<<<<");
+        }
+
+        return isSolutionFound1||isSolutionFound2;
     }
 }

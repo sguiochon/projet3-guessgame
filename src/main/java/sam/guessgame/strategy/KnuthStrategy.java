@@ -95,7 +95,6 @@ public class KnuthStrategy implements SessionVisitor<MastermindResult> {
 
     private void generateSequence(ArrayList<String> listOfSymbols, int position) {
         if (position == candidat.candidatSequence.size()) {
-            //System.out.println(">>> " + listOfSymbols);
             candidatSequences.add(new Sequence(listOfSymbols));
         } else {
             List<String> possibleSymbols = candidat.candidatSequence.get(position);

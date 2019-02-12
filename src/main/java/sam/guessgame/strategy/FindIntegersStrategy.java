@@ -40,13 +40,13 @@ public class FindIntegersStrategy implements SessionVisitor<PlusMinusResult> {
                 case Moins:
                     LOGGER.debug("Position " + position + ", le résultat est 'est strictement inférieur'");
                     for (int j=intSymbol; j<=9; j++){
-                        candidat.invalidSymbolAt(position, new Symbol(0, String.valueOf(j)));
+                        candidat.invalidSymbolAt(position, new Symbol(0, String.valueOf(j)), false);
                     }
                     break;
                 case Plus:
                     LOGGER.debug("Position " + position + ", le résultat est 'est strictement supérieur'");
                     for (int j=0; j<=intSymbol; j++){
-                        candidat.invalidSymbolAt(position, new Symbol(0, String.valueOf(j)));
+                        candidat.invalidSymbolAt(position, new Symbol(0, String.valueOf(j)), false);
                     }
                     break;
                 case Egal:

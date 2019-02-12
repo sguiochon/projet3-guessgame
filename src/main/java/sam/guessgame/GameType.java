@@ -8,10 +8,10 @@ import java.util.List;
  * Liste les types de jeu disponibles
  */
 public enum GameType {
-    PlusMoins(1, "jeu dans lequel il faut trouver les chiffres de la combinaison"),
-    MasterMind(2, "jeu de mastermind traditionnel");
+    PlusMoins(1, "Plus/Moins"),
+    MasterMind(2, "Mastermind");
 
-    private static List<GameType> gameTypes = new ArrayList<GameType>(EnumSet.of(PlusMoins, MasterMind));
+    private static EnumSet<GameType> gameTypes = EnumSet.of(PlusMoins, MasterMind);
 
     private final int internalValue;
     private final String description;
@@ -22,7 +22,11 @@ public enum GameType {
     }
 
     static GameType getByInternalValue(int value) {
-        return gameTypes.get(value - 1);
+        for (GameType gameType : gameTypes){
+            if (gameType.internalValue==value)
+                return gameType;
+        }
+        return null;
     }
 
     static String getDescription() {
@@ -43,12 +47,9 @@ public enum GameType {
         return internalValues;
     }
 
-    public int getInternalValue() {
-        return internalValue;
-    }
-
+    @Override
     public String toString() {
-        return internalValue + " (" + description + ")\n";
+        return internalValue + " : " + description + "\n";
     }
 
 }

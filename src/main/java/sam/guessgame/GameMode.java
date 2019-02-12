@@ -10,7 +10,7 @@ public enum GameMode {
     Spectateur(3, "Ordinateur contre ordinateur"),
     Duel(4, "Duel homme/ordinateur");
 
-    private static List<GameMode> gameModes = new ArrayList<GameMode>(EnumSet.of(Challenger, Defenseur, Spectateur, Duel));
+    private static EnumSet<GameMode> gameModes = EnumSet.of(Challenger, Defenseur, Spectateur, Duel);
 
     private final int internalValue;
     private final String description;
@@ -28,12 +28,12 @@ public enum GameMode {
         return description;
     }
 
-    public String toString(){
-        return internalValue + " (" + description + ")\n";
-    }
-
     static GameMode getByInternalValue(int value){
-        return gameModes.get(value-1);
+        for (GameMode gameMode : gameModes){
+            if (gameMode.internalValue==value)
+                return gameMode;
+        }
+        return null;
     }
 
     static int[] getInternalValues(){
@@ -44,5 +44,10 @@ public enum GameMode {
             i++;
         }
         return internalValues;
+    }
+
+    @Override
+    public String toString(){
+        return internalValue + " : " + description + "\n";
     }
 }

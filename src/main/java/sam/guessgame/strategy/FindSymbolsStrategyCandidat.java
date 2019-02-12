@@ -9,6 +9,9 @@ import sam.guessgame.model.Symbol;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Version de Candidat enrichie de fonctionnalités utilisées par la stratégie {@link FindSymbolsStrategy}.
+ */
 public class FindSymbolsStrategyCandidat extends Candidat {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(FindSymbolsStrategyCandidat.class.getName());
@@ -44,6 +47,11 @@ public class FindSymbolsStrategyCandidat extends Candidat {
         return true;
     }
 
+    /**
+     * Teste si un symbol est présent plus d'une fois dans une séquence.
+     * @param sequence séquence à tester
+     * @return true si un symbol apparait plusieurs fois, false si chaque symbol est unique
+     */
     public boolean hasDuplicatedSymbols(Sequence sequence) {
         boolean hasDuplicated = false;
         int position = 0;
@@ -66,7 +74,7 @@ public class FindSymbolsStrategyCandidat extends Candidat {
      * des modifications de la sequence attendues par la stratégie de changement de symbol, ce qui modifierait l'interprétation
      * de l'évolution des résultats entre deux séquences.
      *
-     * @param sequence
+     * @param sequence séquence à modifier
      * @return nombre de symbols dont la position a été modifiée dans la séquence afin de se conformer aux positions identifiées dans le Candidat
      */
     public int setCorrectSymbolsInSequence(Sequence sequence) {
@@ -91,8 +99,8 @@ public class FindSymbolsStrategyCandidat extends Candidat {
      * combinaison. La liste ainsi constituée sera utilisée lorsqu'il est établi avec certitude qu'un symbol n'est pas dans la séquence: on
      * pourra alors effacer son pair, ce qui optimise la recherche.
      *
-     * @param symbol1
-     * @param symbol2
+     * @param symbol1 l'un des symbols
+     * @param symbol2 l'autre symbol
      */
     public void storePotentialIncorrectPairs(Symbol symbol1, Symbol symbol2) {
         if (potentialIncorrectPairs == null)
@@ -152,7 +160,7 @@ public class FindSymbolsStrategyCandidat extends Candidat {
     /**
      * Elimine les symbols qui ne sont pas dans une séquence.
      *
-     * @param sequence
+     * @param sequence la sequence à modifier
      */
     public void removeNotInSequence(Sequence sequence) {
         LOGGER.debug("Réduction du candidat car tous les symbols sont dans la séquence " + sequence.toString());

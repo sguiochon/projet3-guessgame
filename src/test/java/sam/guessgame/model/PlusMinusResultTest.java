@@ -25,6 +25,5 @@ public class PlusMinusResultTest {
         result.setResultAt(4, PlusMinusResultValue.Plus);
         Assert.assertTrue("++?-+".equals(result.toString()));
 
-
     }
 }

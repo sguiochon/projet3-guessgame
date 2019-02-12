@@ -34,6 +34,7 @@ public class PlusMinusResult implements IResult {
         return results.get(position);
     }
 
+    @Override
     public String toString() {
         StringBuffer str = new StringBuffer();
         for (PlusMinusResultValue value : results) {

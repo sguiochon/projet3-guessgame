@@ -87,7 +87,7 @@ public class GameFactory implements IGameFactory {
         switch (mode) {
             case Duel:
                 //return duelMode;
-                DualGameMode<PlusMinusComputerCoder, PlusMinusHumanDecoder, PlusMinusHumanCoder, PlusMinusComputerDecoder, PlusMinusResult> dualMode = new DualGameMode<>(plusminusSequenceSize, maxNbAttempts, "--- ordinateur VS ordinateur ---", devMode);
+                DualGameMode<PlusMinusComputerCoder, PlusMinusHumanDecoder, PlusMinusHumanCoder, PlusMinusComputerDecoder, PlusMinusResult> dualMode = new DualGameMode<>(plusminusSequenceSize, maxNbAttempts, "--- Duel entre l'ordinateur et VOUS ---", devMode);
                 dualMode.coder1 = plusminusComputerCoder;
                 dualMode.decoder1 = plusminusHumanDecoder;
                 dualMode.coder2 = plusminusHumanCoder;
@@ -100,7 +100,7 @@ public class GameFactory implements IGameFactory {
                 challengerMode.decoder = plusminusHumanDecoder;
                 return challengerMode;
             case Defenseur:
-                SingleGameMode<PlusMinusHumanCoder, PlusMinusComputerDecoder, PlusMinusResult> defenseurMode = new SingleGameMode<>(plusminusSequenceSize, maxNbAttempts, "L'ordinateur doit trouver VOTRE combinaison", devMode);
+                SingleGameMode<PlusMinusHumanCoder, PlusMinusComputerDecoder, PlusMinusResult> defenseurMode = new SingleGameMode<>(plusminusSequenceSize, maxNbAttempts, "--- L'ordinateur doit trouver VOTRE combinaison ---", devMode);
                 defenseurMode.coder = plusminusHumanCoder;
                 defenseurMode.decoder = plusminusComputerDecoder;
                 return defenseurMode;
@@ -117,14 +117,14 @@ public class GameFactory implements IGameFactory {
         switch (mode) {
             case Duel:
                 //return duelMode;
-                DualGameMode<MastermindComputerCoder, MastermindHumanDecoder, MastermindHumanCoder, MastermindComputerDecoder, MastermindResult> dualMode = new DualGameMode<>(mastermindSequenceSize, maxNbAttempts, "--- ordinateur VS ordinateur ---", devMode);
+                DualGameMode<MastermindComputerCoder, MastermindHumanDecoder, MastermindHumanCoder, MastermindComputerDecoder, MastermindResult> dualMode = new DualGameMode<>(mastermindSequenceSize, maxNbAttempts, "--- Duel entre l'ordinateur et VOUS ---", devMode);
                 dualMode.coder1 = mastermindComputerCoder;
                 dualMode.decoder1 = mastermindHumanDecoder;
                 dualMode.coder2 = mastermindHumanCoder;
                 dualMode.decoder2 = mastermindComputerDecoder;
                 return dualMode;
             case Challenger:
-                SingleGameMode<MastermindComputerCoder, MastermindHumanDecoder, MastermindResult> challengerMode = new SingleGameMode<>(mastermindSequenceSize,maxNbAttempts,"--- ordinateur VS ordinateur ---", devMode);
+                SingleGameMode<MastermindComputerCoder, MastermindHumanDecoder, MastermindResult> challengerMode = new SingleGameMode<>(mastermindSequenceSize,maxNbAttempts,"--- VOUS devez trouver la combinaison de l'ordinateur ---", devMode);
                 challengerMode.coder = mastermindComputerCoder;
                 challengerMode.decoder = mastermindHumanDecoder;
                 return challengerMode;

@@ -3,11 +3,8 @@ package sam.guessgame.role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import sam.guessgame.model.*;
-import sam.guessgame.strategy.FindSymbolsStrategy;
-import sam.guessgame.strategy.KnuthStrategy;
 import sam.guessgame.strategy.SessionVisitor;
 
 

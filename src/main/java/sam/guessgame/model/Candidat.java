@@ -38,6 +38,10 @@ public class Candidat {
         }
     }
 
+    /**
+     * Cette méthode permet de reconstruire l'instance avec l'ensemble des possibilités lorsque l'utilisateur lance
+     * plusieurs jeux successifs.
+     */
     public void init(){
         candidatSequence = new ArrayList<List<String>>();
         for (int i = 0; i < sequenceSize; i++) {
@@ -77,28 +81,9 @@ public class Candidat {
     }
 
     /**
-     * Reduces the number of candidat symbols based on the exhaustive list of valid symbol.
+     * Réduit les possibilités lorsqu'un Symbol est identifié, à une position donnée.
      *
-     * @param validSequence: sequence made of correct symbols (whether correctly positionned ot not) that must persist in the Candidate instance. Other symbols must be removed as being not valid.
-     */
-    /*public void validSymbols(Sequence validSequence) {
-        String validSymbols = validSequence.toString();
-        for (List<String> symbols : candidatSequence) {
-            String[] tempoSymbols = symbols.toArray(new String[0]);
-            for (int i = 0; i < tempoSymbols.length; i++) {
-                String symbol = tempoSymbols[i];
-                if (!validSymbols.contains(symbol)) {
-                    symbols.remove(symbol);
-                }
-            }
-        }
-    }
-    */
-
-    /**
-     * Reduces the number of candidat symbols based on the known symbol at one specified position.
-     *
-     * @param symbol
+     * @param symbol   le symbol identifié
      */
     public void foundSymbol(Symbol symbol) {
         int currentColumn = 0;
@@ -122,8 +107,18 @@ public class Candidat {
      * @param symbol   le symbol à enlever de la liste des possibilités
      */
     public void invalidSymbolAt(int position, Symbol symbol) {
+        invalidSymbolAt(position, symbol, true);
+    }
+
+    /**
+     * Réduit la liste des symbols d'une colonne donnée en enlevant un des symbols qu'elle contient.
+     * @param position position à laquelle le symbol doit être affecté
+     * @param symbol symbol identifié
+     * @param propagate si true, on élimine le symbol trouvé des possibilités associées aux autres positions.
+     */
+    public void invalidSymbolAt(int position, Symbol symbol, boolean propagate){
         candidatSequence.get(position).remove(symbol.getSymbol());
-        if (candidatSequence.get(position).size() == 1) {
+        if (propagate && candidatSequence.get(position).size() == 1) {
             foundSymbol(new Symbol(position, candidatSequence.get(position).get(0)));
         }
     }
@@ -171,9 +166,9 @@ public class Candidat {
     /**
      * Génère une séquence aléatoirement qui n'a pas déjà été proposée dans la session
      *
-     * @param onlyUniqueSymbols
-     * @param session
-     * @return
+     * @param onlyUniqueSymbols true si aucun doublon n'est autorisé dans la sequence à générer
+     * @param session historique de jeu contenant des séquences afin de s'assurer que la séquence générée n'est pas déjà présente dans l'historique.
+     * @return la sequence générée.
      */
     public Sequence generateRandomSequence(boolean onlyUniqueSymbols, Session<MastermindResult> session) {
         boolean isNewSequence = true;

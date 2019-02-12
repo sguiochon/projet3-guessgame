@@ -1,6 +1,11 @@
 package sam.guessgame.role;
 
+import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import sam.guessgame.App;
+import sam.guessgame.GameFactory;
 import sam.guessgame.model.Candidat;
 import sam.guessgame.model.MastermindCandidat;
 import sam.guessgame.model.Sequence;
@@ -11,12 +16,17 @@ public class SessionTest {
     @Test
     public void givenNothing_WhenCreatingADecoder_ThenItContainsaValidSession(){
 
-        MastermindComputerDecoder computerDecoder = new MastermindComputerDecoder(new MastermindCandidat(3, new String[]{"A", "B", "C", "D", "E", "F"}));
-        computerDecoder.initSequence();
+        // Arrange
+        ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(App.class);
+        ctx.getEnvironment().setActiveProfiles("knuth");
+        MastermindComputerDecoder decoder = ctx.getBean(MastermindComputerDecoder.class);
+        decoder.initSequence();
 
-        Sequence sequence = computerDecoder.generateAttempt(new Session());
+        // Act
+        Sequence sequence = decoder.generateAttempt(new Session());
 
-        System.out.println(sequence.toString());
+        // Assert
+        Assert.assertTrue(!sequence.toString().isEmpty());
 
     }
 }
