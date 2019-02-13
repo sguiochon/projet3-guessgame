@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+/**
+ * Classe permettant d'instancier un {@link Candidat} avec les paramètres du jeu de Mastermind.
+ */
 @Component
 @Scope("prototype")
 public class MastermindCandidat extends Candidat {

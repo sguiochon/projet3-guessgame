@@ -16,18 +16,18 @@ public class DualGameMode<T extends ICoder, U extends IDecoder, TT extends ICode
 
     private final static Logger LOGGER = LoggerFactory.getLogger(DualGameMode.class.getName());
 
-    public final int sequenceSize;
-    public final int maxNbAttempts;
+    private final int sequenceSize;
+    private final int maxNbAttempts;
 
     public T coder1;
     public U decoder1;
-    public Session<V> session1 = new Session();
+    public Session<V> session1;
 
     public TT coder2;
     public UU decoder2;
-    public Session<V> session2 = new Session();
+    public Session<V> session2;
 
-    public String description;
+    private String description;
 
     private boolean devMode;
 
@@ -42,8 +42,10 @@ public class DualGameMode<T extends ICoder, U extends IDecoder, TT extends ICode
     public void init() {
         coder1.initSequence();
         decoder1.initSequence();
+        session1 = new Session<V>();
         coder2.initSequence();
         decoder2.initSequence();
+        session2 = new Session<V>();
     }
 
     @Override

@@ -19,7 +19,7 @@ public class SingleGameMode<T extends ICoder, U extends IDecoder, V extends IRes
 
     public T coder;
     public U decoder;
-    private Session<V> session = new Session<V>();
+    private Session<V> session;
 
     private boolean devMode;
 
@@ -36,6 +36,7 @@ public class SingleGameMode<T extends ICoder, U extends IDecoder, V extends IRes
     public void init() {
         coder.initSequence();
         decoder.initSequence();
+        session = new Session<V>();
     }
 
     /**

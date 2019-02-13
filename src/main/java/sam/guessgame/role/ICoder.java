@@ -11,6 +11,11 @@ import sam.guessgame.model.Sequence;
  */
 public interface ICoder<T extends IResult> extends ISequenceInitializer {
 
+    /**
+     * Méthode retournant un {@link IResult} rendant compte de la pertinence d'une combinaison.
+     * @param attempt la combinaison à comparer à la combinaison secrète
+     * @return le résultat
+     */
     T evaluateAttempt(Sequence attempt);
 
     default boolean check(T result, int nbSymbols) {

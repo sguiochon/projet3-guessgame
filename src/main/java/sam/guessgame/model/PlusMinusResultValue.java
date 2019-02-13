@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
+/**
+ * Représentation du résultat de la comparaison entre un chiffre d'une combinaison (typiquement, la combinaison secrète)
+ * et une autre combinaison (typiquement, un essai)
+ */
 public enum PlusMinusResultValue {
     Moins("-"),Egal("="),Plus("+"), Inconnu("?");
 

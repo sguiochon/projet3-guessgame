@@ -11,5 +11,10 @@ import sam.guessgame.model.Session;
  */
 public interface IDecoder<T extends IResult> extends ISequenceInitializer {
 
+    /**
+     * Méthode réalisant la recherche d'une combinaison sur la base de tous les tours précédents
+     * @param session tours réalisés jusqu'à présent dans la partie
+     * @return la combinaison proposée par le décodeur
+     */
     Sequence generateAttempt(Session<T> session);
 }

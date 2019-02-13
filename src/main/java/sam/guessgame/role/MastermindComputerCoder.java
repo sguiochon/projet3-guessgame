@@ -65,30 +65,6 @@ public class MastermindComputerCoder extends AbstractComputerCoder implements IC
             }
         }
         return result;
-
-
-
-
-
-        /*
-        MastermindResult result = new MastermindResult();
-        int attemptSymbolPosition = 0;
-        for (String attemptSymbol : attempt.getSymbols()) {
-            int winningSymbolPosition = 0;
-            for (String winningSymbol : winningSequence.getSymbols()) {
-                if (attemptSymbol.equals(winningSymbol)) {
-                    if (attemptSymbolPosition == winningSymbolPosition) {
-                        result.incNbCorrectPosition();
-                    } else {
-                        result.incNbCorrectSymbol();
-                    }
-                    break;
-                }
-                winningSymbolPosition++;
-            }
-            attemptSymbolPosition++;
-        }
-        return result;*/
     }
 
     public Sequence getWinningSequence() {

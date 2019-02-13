@@ -36,6 +36,10 @@ public class Sequence {
         return symbols;
     }
 
+    /**
+     * Ajoute un symbol à la suite des autres dans la séquence.
+     * @param symbol le symbol à ajouter
+     */
     public void addSymbol(String symbol) {
         symbols.add(symbol);
     }
@@ -44,6 +48,11 @@ public class Sequence {
         return new Sequence(this.toString().replace(" ", "").split(""));
     }
 
+    /**
+     * Affecte la valeur d'un symbo à la position indiquée (sans prendre en compte la position du {@link Symbol})
+     * @param position
+     * @param symbol
+     */
     public void setSymbolAt(int position, String symbol) {
         symbols.set(position, symbol);
     }
@@ -63,10 +72,19 @@ public class Sequence {
         return stb.toString();
     }
 
+    /**
+     * Renvoie le symbol situé à la position indiquée
+     * @param position la position
+     * @return la valeur du symbol présent à la position
+     */
     public String getSymbolAt(int position) {
         return symbols.get(position);
     }
 
+    /**
+     * Enlève un symbol à une position donnée, raccourcissant ainsi la longueur de la séquence.
+     * @param position position à laquelle on élimine le symbol
+     */
     public void removeSymbolAt(int position){
         symbols.remove(position);
     }

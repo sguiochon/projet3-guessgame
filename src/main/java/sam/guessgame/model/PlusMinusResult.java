@@ -20,6 +20,12 @@ public class PlusMinusResult implements IResult {
         nbCorrectPosition = nb;
     }
 
+    /**
+     * Affecte un résultat unitaire (+,-,=) à la position spécifiée.
+     *
+     * @param position la position de la combinaison dont on veut affecter le résultat
+     * @param result   le résultat à affecter
+     */
     public void setResultAt(int position, PlusMinusResultValue result) {
         if (results.size() <= position) {
             int firstUnsetPosition = results.size();
@@ -30,6 +36,12 @@ public class PlusMinusResult implements IResult {
         results.set(position, result);
     }
 
+    /**
+     * Retourne le résultat unitaire (+,-,=) pour la position indiquée.
+     *
+     * @param position position dont on retourne la valeur du résultat.
+     * @return le résultat à la position indiquée
+     */
     public PlusMinusResultValue getResultAt(int position) {
         return results.get(position);
     }
