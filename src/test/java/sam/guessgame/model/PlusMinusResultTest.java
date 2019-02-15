@@ -2,6 +2,8 @@ package sam.guessgame.model;
 
 import org.junit.Assert;
 import org.junit.Test;
+import sam.guessgame.model.gameplay.PlusMinusResult;
+import sam.guessgame.model.gameplay.PlusMinusResultValue;
 
 public class PlusMinusResultTest {
 

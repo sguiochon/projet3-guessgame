@@ -3,19 +3,20 @@ package sam.guessgame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import sam.guessgame.model.game.GameMode;
+import sam.guessgame.model.game.GameType;
+import sam.guessgame.model.game.IGame;
 
 /**
  * Classe constituant le point d'entrée de l'application Guess Game
  */
 @Configuration
-@ComponentScan(basePackages = {"sam.guessgame", "sam.guessgame.role", "sam.guessgame.model", "sam.guessgame.strategy"})
+@ComponentScan(basePackages = {"sam.guessgame", "sam.guessgame.player", "sam.guessgame.model", "sam.guessgame.strategy"})
 @PropertySource("classpath:config.properties")
 public class App {
 
@@ -44,7 +45,7 @@ public class App {
             LOGGER.info("Type de jeu: " + gameType);
             LOGGER.info("Mode de jeu: " + gameMode);
 
-            IGameMode game = factory.getGameMode(gameMode, gameType);
+            IGame game = factory.getGameMode(gameMode, gameType);
 
             game.init();
             game.run();

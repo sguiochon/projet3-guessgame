@@ -1,9 +1,8 @@
 package sam.guessgame.strategy;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
-import sam.guessgame.model.*;
+import sam.guessgame.model.gameplay.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -2,7 +2,7 @@ package sam.guessgame.strategy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sam.guessgame.model.*;
+import sam.guessgame.model.gameplay.*;
 
 import java.util.Arrays;
 import java.util.Random;

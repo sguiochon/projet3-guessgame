@@ -1,9 +1,9 @@
 package sam.guessgame.strategy;
 
-import sam.guessgame.model.Candidat;
-import sam.guessgame.model.IResult;
-import sam.guessgame.model.Sequence;
-import sam.guessgame.model.Session;
+import sam.guessgame.model.gameplay.Candidat;
+import sam.guessgame.model.gameplay.IResult;
+import sam.guessgame.model.gameplay.Sequence;
+import sam.guessgame.model.gameplay.Session;
 
 /**
  * Interface définissant le comportement consistant à passer en revue l'historique des coups joués dans une partie.

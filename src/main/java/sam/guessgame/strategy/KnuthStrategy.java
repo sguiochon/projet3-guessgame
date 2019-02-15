@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import sam.guessgame.exception.AlgorithmException;
-import sam.guessgame.model.*;
+import sam.guessgame.model.gameplay.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;

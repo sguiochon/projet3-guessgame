@@ -1,7 +1,6 @@
 package sam.guessgame;
 
-import org.springframework.stereotype.Component;
-import sam.guessgame.model.Sequence;
+import sam.guessgame.model.gameplay.Sequence;
 
 import java.util.List;
 import java.util.Optional;

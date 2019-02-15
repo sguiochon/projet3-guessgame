@@ -2,9 +2,9 @@ package sam.guessgame.strategy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sam.guessgame.model.Candidat;
-import sam.guessgame.model.Sequence;
-import sam.guessgame.model.Symbol;
+import sam.guessgame.model.gameplay.Candidat;
+import sam.guessgame.model.gameplay.Sequence;
+import sam.guessgame.model.gameplay.Symbol;
 
 import java.util.ArrayList;
 import java.util.List;

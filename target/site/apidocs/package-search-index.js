@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"sam.guessgame"},{"l":"sam.guessgame.exception"},{"l":"sam.guessgame.model"},{"l":"sam.guessgame.role"},{"l":"sam.guessgame.strategy"}]
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"sam.guessgame"},{"l":"sam.guessgame.exception"},{"l":"sam.guessgame.model.game"},{"l":"sam.guessgame.model.gameplay"},{"l":"sam.guessgame.model.player"},{"l":"sam.guessgame.strategy"}]

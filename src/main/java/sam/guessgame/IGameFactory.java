@@ -1,5 +1,9 @@
 package sam.guessgame;
 
+import sam.guessgame.model.game.GameMode;
+import sam.guessgame.model.game.GameType;
+import sam.guessgame.model.game.IGame;
+
 /**
  * Factory de jeux
  */
@@ -11,6 +15,6 @@ public interface IGameFactory {
      * @param gameType type de jeu
      * @return l'instance de jeu correspondant
      */
-    IGameMode getGameMode(GameMode gameMode, GameType gameType);
+    IGame getGameMode(GameMode gameMode, GameType gameType);
 
 }

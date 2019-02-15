@@ -1,10 +1,9 @@
 package sam.guessgame.strategy;
 
 import org.junit.Test;
-import sam.guessgame.model.Candidat;
-import sam.guessgame.model.MastermindCandidat;
-import sam.guessgame.model.MastermindResult;
-import sam.guessgame.model.Sequence;
+import sam.guessgame.model.gameplay.MastermindCandidat;
+import sam.guessgame.model.gameplay.MastermindResult;
+import sam.guessgame.model.gameplay.Sequence;
 
 public class KnuthStrategyTest {
 
