@@ -16,7 +16,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <project.scm.id>github</project.scm.id>
     </properties>
+
+    <scm>
+        <connection>scm:git:https://github.com/sguiochon/projet3-guessgame.git</connection>
+        <developerConnection>scm:git:file://localhost/.</developerConnection>
+    </scm>
 
     <dependencies>
         <dependency>
@@ -95,6 +101,12 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
             </plugin>
 
         </plugins>

@@ -16,7 +16,7 @@ import sam.guessgame.model.game.IGame;
  * Classe constituant le point d'entrée de l'application Guess Game
  */
 @Configuration
-@ComponentScan(basePackages = {"sam.guessgame", "sam.guessgame.player", "sam.guessgame.model", "sam.guessgame.strategy"})
+@ComponentScan(basePackages = {"sam.guessgame", "sam.guessgame.model.player", "sam.guessgame.model", "sam.guessgame.strategy"})
 @PropertySource("classpath:config.properties")
 public class App {
 
