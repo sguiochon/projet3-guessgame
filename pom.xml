@@ -20,7 +20,7 @@
 
     <scm>
         <connection>scm:git:https://github.com/sguiochon/projet3-guessgame.git</connection>
-        <developerConnection>scm:git:file://localhost/.</developerConnection>
+        <developerConnection>scm:git:https://github.com/sguiochon/projet3-guessgame.git</developerConnection>
       <tag>hello-1.0</tag>
   </scm>
 
