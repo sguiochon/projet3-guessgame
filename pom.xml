@@ -5,7 +5,7 @@
 
     <groupId>sam.tuto</groupId>
     <artifactId>hello</artifactId>
-    <version>1.0</version>
+    <version>1.1-SNAPSHOT</version>
 
     <packaging>jar</packaging>
 
@@ -21,7 +21,7 @@
     <scm>
         <connection>scm:git:https://github.com/sguiochon/projet3-guessgame.git</connection>
         <developerConnection>scm:git:https://github.com/sguiochon/projet3-guessgame.git</developerConnection>
-      <tag>hello-1.0</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <dependencies>
