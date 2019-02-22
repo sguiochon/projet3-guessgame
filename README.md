@@ -30,7 +30,7 @@ Exécuter la commande
 
                 java -jar hello-1.0-SNAPSHOT-jar-with-dependencies.jar  
 
-Deux paramètres (optionnels) peuvent être ajoutés à la ligne de commande:
+Deux paramètres (optionnels) peuvent être ajoutés à la ligne de commande (juste après `java` et avant `-jar`):
 1. `-DdevMode=true` : permet l'affichage de la séquence secrète à chaque tour de jeu
 2. `-Dspring.profiles.active=[sam|knuth]` : permet de choisir la stratégie de décodage utilisée dans le jeu du Mastermind. Si `knuth` est indiqué, c'est l'algorithm de Knuth qui est utilisé (méthode la plus efficace basée sur la résolution par force brute). Si `sam` est indiqué, c'est la stratégie de l'auteur qui est utilisée, moins performante que celle de Knuth mais réalisable par un humain, à la différence de l'autre.
 
